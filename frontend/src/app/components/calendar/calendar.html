@@ -1,0 +1,20 @@
+<div id="calendar" [ngStyle]="{'--defaultColor': defaultEventColor}">
+  <p-toast key="message" />
+  <p-toast key="loading" preventOpenDuplicates [dt]="{width: 'auto'}">
+    <ng-template #headless let-message>
+      <p-progress-spinner ariaLabel="loading" [style]="{width: '75px', height: '75px'}" />
+    </ng-template>
+  </p-toast>
+
+  <app-calendar-toolbar #toolbar (onDateSelect)="fullcalendar.handleDateClick($event, true)" />
+  <app-fullcalendar #fullcalendar (onDateSelect)="toolbar.selectDate($event)" />
+</div>
+
+<app-event-dialog (onSave)="fullcalendar.updateCalendar({eventId: $event})" />
+<app-contact-dialog (onSave)="fullcalendar.updateCalendar({contactId: $event})" />
+@if (contextMenuOpen) {
+  <app-context-menu (onRemoveEvent)="fullcalendar.handleEventRemove($event)" />
+}
+@if(saveMode === 'manual') {
+  <app-nanobar />
+}

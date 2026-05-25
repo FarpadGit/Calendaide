@@ -1,0 +1,35 @@
+<input 
+    pInputText
+    fluid 
+    [(ngModel)]="inputText"
+    (focus)="monthPicker.toggle($event)"
+    (change)="handleInputChange($event.target.value)"
+/>
+<p-popover #monthPicker>
+    <table role="grid" class="p-datepicker-day-view" data-pc-section="table">
+    <thead data-pc-section="tableheader">
+        <tr data-pc-section="tableheaderrow">
+            <td colspan="7">{{headerText}}</td>
+        </tr>
+    </thead>
+    <tbody data-pc-section="tablebody">
+        @for (week of daysOfTheMonth; track week) {
+            <tr data-pc-section="tablebodyrow">
+                @for(day of week; track day) {
+                    <td class="p-datepicker-day-cell">
+                        <span 
+                            draggable="false" 
+                            pripple="" 
+                            class="p-ripple p-datepicker-day" 
+                            [ngClass]="{'p-disabled': day <= 0, 'p-datepicker-day-selected': currentValues?.includes(day)}" 
+                            (click)="day > 0 ? handleDateSelect(day) : null"
+                        >
+                            {{day > 0 ? day : ''}}
+                        </span>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
+</p-popover>

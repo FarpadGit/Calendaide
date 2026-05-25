@@ -1,0 +1,10 @@
+.context-menu {
+    position: var(--position);
+    top: var(--top);
+    left: var(--left);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 5px 5px 5px -3px black;
+    border-radius: var(--p-menu-border-radius);
+    z-index: 100;
+}

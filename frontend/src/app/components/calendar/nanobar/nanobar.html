@@ -1,0 +1,6 @@
+@if(isVisible){
+    <div class="nanobar">
+        <span> Vigyázat! Manuális mentési módban semmi nem kerül elmentésre amíg meg nem nyomod a zöld "Mentés" gombot az eszköztárban. </span>
+        <p-button icon="pi pi-times" rounded text [dt]="{paddingX: 0, paddingY: 0, root: {iconOnlyWidth: '1.5rem'}}" (onClick)="isVisible = false"/>
+    </div>
+}

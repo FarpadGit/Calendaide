@@ -1,0 +1,24 @@
+.user-menu {
+    display: flex;
+    justify-content: flex-end;
+
+    .displayname {
+        margin-right: 1rem;
+    }
+
+    p-avatar {
+        cursor: pointer;
+        user-select: none;
+    }
+
+    
+}
+.expander {
+    overflow: hidden;
+    transition: height 1s ease;
+    height: 0;
+    
+    &.open {
+        height: 50px;
+    }
+}

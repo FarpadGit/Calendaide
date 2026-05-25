@@ -1,0 +1,21 @@
+<p-dialog [header]="contactData.id === '' ? 'Új Kapcsolat hozzáadása' : 'Kapcsolat szerkesztése'" [modal]="true" [visible]="isVisible" (onHide)="isVisible = false; formData.resetForm()">
+    <form #formData="ngForm" (ngSubmit)="handleSave()">
+        <div class="field">
+            <label for="name">Név</label>
+            <input pInputText id="name" name="name" autocomplete="off" [(ngModel)]="contactData.name" required />
+        </div>
+        <div class="field">
+            <label for="color">Szín</label>
+            <p-colorpicker id="color" name="color" [(ngModel)]="contactData.color" [defaultColor]="defaultColor"/>
+            <p-button label="Törlés" type="button" text size="small" (click)="contactData.color = undefined" />
+        </div>
+        <div class="field">
+            <label for="comment">Megjegyzés</label>
+            <textarea id="comment" name="comment" rows="5" cols="30" pTextarea autoResize [(ngModel)]="contactData.comment"></textarea>
+        </div>
+        <div class="buttons">
+            <p-button label="Mégse" severity="secondary" type="button" (click)="isVisible = false" />
+            <p-button label="Mentés" type="submit" [disabled]="formData.invalid" />
+        </div>
+    </form>
+</p-dialog>

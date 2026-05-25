@@ -1,0 +1,12 @@
+::ng-deep .p-popover {
+    
+    margin-block-start: 0;
+
+    &::before, &::after {
+        content: none;
+    }
+}
+
+thead td {
+    text-align: center;
+}

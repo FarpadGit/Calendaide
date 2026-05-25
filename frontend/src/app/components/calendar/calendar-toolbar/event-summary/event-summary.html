@@ -1,0 +1,62 @@
+<div id="event-summary">
+    <p-datepicker 
+        id="toolbar-datepicker"
+        [inline]="true" 
+        [showButtonBar]="true"
+        [selectOtherMonths]="true"
+        (onSelect)="handleDateSelect($event)" 
+        [pt]="{root: {style: {minWidth: '330px'}}}"
+        [dt]="datePickerTokens"
+    >
+        <ng-template #buttonbar let-todayCallback="todayCallback">
+            <p-button 
+                size="small" 
+                label="Ma" 
+                variant="outlined" 
+                severity="contrast"
+                (click)="todayCallback($event)" 
+                [pt]="{host: {style: {width: '100%'}}, root: {style: {width: '100%'}}}" 
+            />
+        </ng-template>
+    </p-datepicker>
+
+    <p-panel 
+        header="A Nap Eseményei" 
+        [pt]="{content: {style: {display: 'flex', flexDirection: 'column', gap: '1rem', marginTop:'0.25rem' }}}"
+    >
+        <div class="event-list-container">
+        @for(event of eventsForCurrentDate; track event.id) {
+            <ng-container *ngTemplateOutlet="eventField; context: {event: event, date: currentSelectedDate}" />
+        }
+        @if(eventsForCurrentDate.length === 0) {
+            <div>(nincs esemény)</div>
+        }
+        </div>
+    </p-panel>
+
+    @if(futureEvents.length > 0) {
+        <p-panel 
+            header="Események a közeljövőben" 
+            [pt]="{content: {style: {display: 'flex', flexDirection: 'column', gap: '1rem', marginTop:'0.25rem' }}}"
+        >
+            <div class="event-list-container">
+            @for(eventList of futureEvents; track eventList.date) {
+                <div class="event-group">
+                    <p class="date">{{getDateString(eventList.date)}}</p>
+                    
+                @for(event of eventList.events; track event.id) {
+                    <ng-container *ngTemplateOutlet="eventField; context: {event: event, date: eventList.date}" />
+                }
+                </div>
+            }
+            </div>
+        </p-panel>
+    }
+</div>
+
+<ng-template #eventField let-event="event" let-date="date">
+    <div class="event-field" [ngStyle]="{'--color': getColor(event.id)}" (touchstart)="handleEventSelect(event.id)">
+        <p class="time">{{getTimeString(event, date)}}</p>
+        <p class="title">{{event.title}}</p>
+    </div>
+</ng-template>

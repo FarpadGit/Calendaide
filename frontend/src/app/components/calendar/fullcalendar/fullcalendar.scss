@@ -1,0 +1,66 @@
+full-calendar {
+    margin: 1rem 0.5rem 0;
+}
+
+// FullCalendar style overrides
+::ng-deep {
+    // draggable events inside and outside fullcalendar
+    .fc-h-event {
+        border: none;
+        overflow: hidden;
+        border-radius: 5px;
+    }
+
+    .fc {
+        --fc-button-bg-color: var(--p-primary-50);
+        --fc-button-border-color: var(--p-primary-50);
+        --fc-button-active-bg-color: var(--p-primary-200);
+        --fc-button-active-border-color: var(--p-primary-200);
+        --fc-button-hover-bg-color: var(--p-primary-100);
+        --fc-button-hover-border-color: var(--p-primary-100);
+        --fc-button-text-color: var(--p-text-color);
+
+        .fc-toolbar-title {
+            color: var(--p-text-color);
+        }
+
+        .fc-button:focus, .fc-button-primary:focus {
+            box-shadow: none !important;
+        }
+
+        // for context menu visibility
+        .fc-daygrid-event, .fc-timegrid-event-harness:has(.context-menu-open) {
+            z-index: unset !important;
+        }
+        
+        // for context menu visibility
+        .fc-scroller-harness{
+            overflow: visible !important;
+        }
+
+        // for context menu visibility
+        .fc-timegrid-col-frame:has(.context-menu-open) {
+            z-index: 10;
+        }
+        
+        // for context menu visibility
+        a.context-menu-open {
+            z-index: 10 !important;
+            
+            .fc-event-resizer-end {
+                pointer-events: none;
+            }
+        }
+        
+        // selected cell highlight should not block events
+        .fc-daygrid-day-bg .fc-highlight {
+            z-index: 0 !important;
+        }
+
+        @media (max-width: 639px) {
+            .fc-header-toolbar {
+                font-size: 8pt;
+            }
+        }
+    }
+}

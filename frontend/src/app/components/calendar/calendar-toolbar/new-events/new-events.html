@@ -1,0 +1,98 @@
+<p-panel 
+    header="Új Események" 
+    [pt]="{
+        root: {style: {background: 'none'}},
+        content: {style: {display: 'flex', flexDirection: 'column', gap: '1rem', marginTop:'0.25rem'}}
+    }"
+>
+    <div class="contact-list-container">
+        <p-floatlabel variant="on" [pt]="{root: {style: {width: '100%'}}}">
+            <label for="contacts">Kapcsolataim</label>
+            <!-- Contacts Select -->
+            <p-select #select [options]="contacts" optionLabel="name" optionValue="value" fluid [(ngModel)]="activeContact" inputId="contacts">
+                <ng-template #selectedItem let-selectedContact>
+                    <div class="contact-item">
+                        @if(contacts.length > 0){
+                            <span class="color-badge" [style]="'--contactColor: ' + selectedContact.color"></span>
+                            <span>{{ selectedContact.name }}</span>
+                        } @else {
+                            <span>A kapcsolat listád üres</span>
+                        }
+                    </div>
+                </ng-template>
+                <ng-template let-contact #item>
+                    <div class="contact-item">
+                        <span class="color-badge" [style]="'--contactColor: ' + contact.color"></span>
+                        <span>{{ contact.name }}</span>
+                    </div>
+                </ng-template>
+                <ng-template #footer>
+                    <div class="contact-list-footer">
+                        <p-button label="Új kapcsolat" fluid severity="secondary" text icon="pi pi-plus" (onClick)="select.hide(); addNewContact()" />
+                    </div>
+                </ng-template>
+            </p-select>
+        </p-floatlabel>
+        <div>
+            <!-- Contacts options -->
+            <p-button icon="pi pi-ellipsis-v" text (onClick)="contactPopover.toggle($event)" />
+            <p-popover #contactPopover>
+                <h4>Kapcsolat Műveletek</h4>
+                <div class="contact-options">
+                    <p-button label="Szerkesztés" text fluid icon="pi pi-pencil" (onClick)="contactPopover.hide(); editContact()" />
+                    <p-button label="Törlés" text fluid icon="pi pi-eraser" (onClick)="contactPopover.hide(); deleteContact()" 
+                        [disabled]="unscheduledEvents.length > 0" 
+                        [pTooltip]="unscheduledEvents.length > 0 ? 'Kapcsolatot csak akkor tudsz törölni, ha nincsenek hozzá tartozó ütemezetlen események' : undefined" 
+                        tooltipPosition="right" />
+                </div>
+            </p-popover>
+        </div>
+    </div>
+    <!-- New Events -->
+    <p-splitbutton 
+        [label]="NumNewEvent + ' Új Esemény'" 
+        icon="pi pi-plus" 
+        (onClick)="addNewEvent()"
+        (onDropdownClick)="newEventPopover.toggle($event)"
+        [menuStyle]="{display: 'none'}"
+        [pt]="{pcButton: {root: {style: {width: '100%'}}}}"
+    />
+    <p-popover #newEventPopover>
+        <p>Új események száma</p>
+        <p-inputnumber 
+            [(ngModel)]="NumNewEvent" 
+            [min]="1"
+            [showButtons]="true"
+            buttonLayout="horizontal" 
+            spinnerMode="horizontal" 
+            [pt]="{root: {style: {width: '100%'}}, pcInputText: {root: {style: {width: '3rem'}}}}"
+        >
+            <ng-template #incrementbuttonicon>
+                <span class="pi pi-plus"></span>
+            </ng-template>
+            <ng-template #decrementbuttonicon>
+                <span class="pi pi-minus"></span>
+            </ng-template>
+        </p-inputnumber>
+    </p-popover>
+    <!-- Unscheduled Events Panel -->
+    <p-panel header="Ütemezetlen Események">
+        <ng-template #icons>
+            <p-button icon="pi pi-trash" pTooltip="Összes ütemezetlen törlése" tooltipPosition="top" severity="secondary" rounded text (click)="clearUnscheduledEvents()" />
+        </ng-template>
+        <div class="draggable-event-queue">
+            @for(event of unscheduledEvents; track event.id; let i = $index) {
+                <div>
+                    <span class="list-marker">{{i + 1}}</span>
+                    <div #draggable class="fc-event fc-h-event fc-event-draggable fc-daygrid-event">
+                        <app-calendar-event-content 
+                            [event]="event" 
+                            [contact]="getContact(event.contactId)"
+                            (onContextMenu)="handleEventContextMenu($event)" 
+                        />
+                    </div>
+                </div>
+            }
+        </div>
+    </p-panel>
+</p-panel>

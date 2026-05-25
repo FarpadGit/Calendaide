@@ -1,0 +1,9 @@
+#calendar {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2fr 8fr;
+
+    @media (max-width: 1023px) {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,94 @@
+<p-dialog header="Esemény Szerkesztése" [modal]="true" [visible]="isVisible" (onHide)="isVisible = false">
+     <form [formGroup]="dialogForm" (ngSubmit)="handleSave()">
+        <div class="field">
+            <label for="type">Típus</label>
+            <p-select id="type" [options]="typeOptions" optionLabel="name" optionValue="value" formControlName="type" />
+        </div>
+        <div class="field">
+            <label for="title">Címke</label>
+            <input pInputText id="title" autocomplete="off" formControlName="title" fluid required />
+        </div>
+        <div class="field">
+            <label for="title">Időtartam</label>
+            <div class="radio-container">
+                <div class="radio-field">
+                    <p-radiobutton inputId="allday" [value]="true" formControlName="isAllday" />
+                    <label for="allday">Egész Nap</label>
+                </div>
+                <div class="radio-field">
+                    <p-radiobutton inputId="fixed" [value]="false" formControlName="isAllday" />
+                    <label for="fixed">Rögzített</label>
+                </div>
+            </div>
+        </div>    
+        <div class="field">
+            <label for="start-time">Kezdés</label>
+            <p-datepicker inputId="start-time" formControlName="startTime" [showTime]="!isAllDay" hourFormat="24" [showClear]="true" />
+        </div>
+        @if(!isAllDay) {
+            <div class="field">
+                <label for="duration">Esemény hossza</label>
+                <div>
+                    <p-inputnumber inputId="duration" [min]="isAllDay ? 0 : 30" formControlName="duration" fluid required />
+                    <span> perc</span>
+                </div>
+            </div>
+        }
+        @if(isRecurring) {
+            <div formGroupName="recurrenceData">
+                <div class="field">
+                    <label for="interval">Sűrűség</label>
+                    <div>
+                        <p-inputnumber inputId="interval" [min]="1" [inputSize]="2" [useGrouping]="false" formControlName="interval" required />
+                        <p-select id="frequency" [options]="frequencyOptions" optionLabel="name" optionValue="value" formControlName="frequency" fluid (onChange)="handleFrequencyChange()" />
+                    </div>
+                    @if(frequency !== 'daily') {
+                        <p-inplace 
+                            id="rrule-inplace-toggle" 
+                            [active]="byTimeControl.value !== null"
+                            [pt]="{display: {style: {width: '100%', textAlign: 'center'}}}"
+                        >
+                            <ng-template #display>
+                                <span>Csak ezeken a napokon</span>
+                            </ng-template>
+                            <ng-template #content let-closeCallback="closeCallback">
+                                <div class="picker-container">
+                                    @if(frequency === 'weekly') {
+                                        <app-week-picker class="w-full" [formControl]="byTimeControl"/>
+                                    } @else if(frequency === 'monthly') {
+                                        <app-month-picker class="w-full" [month]="dialogForm.controls.startTime.value" [formControl]="byTimeControl"/>
+                                    }
+                                    <p-button 
+                                        type="button" 
+                                        text 
+                                        severity="danger"
+                                        (click)="byTimeControl.reset(); closeCallback($event)" 
+                                        [pt]="{root: {style: {height: '100%'}}}"
+                                    >
+                                        <i class="pi pi-times" pButtonIcon></i>
+                                    </p-button>
+                                </div>
+                            </ng-template>
+                        </p-inplace>
+                    }
+                </div>
+                <div class="field">
+                    <label for="groupId" pTooltip="Ha több eseményt együtt szeretnél mozgatni a naptárban akkor adj nekik megegyező azonosítókat">Csoport Azonosító</label>
+                    <input pInputText id="groupId" autocomplete="off" formControlName="groupId" fluid />
+                </div>
+                <div class="field">
+                    <label for="until" pTooltip="Ekkor ér véget az ismétlődés">Időszak vége</label>
+                    <p-datepicker inputId="until" name="until" formControlName="until" placeholder="(nincs)" />
+                </div>
+            </div>
+        }
+        <div class="field">
+            <label for="comment">Megjegyzés</label>
+            <textarea id="comment" name="comment" rows="5" cols="30" pTextarea autoResize formControlName="comment"></textarea>
+        </div>
+        <div class="buttons">
+            <p-button label="Mégse" severity="secondary" type="button" (click)="isVisible = false" />
+            <p-button label="Mentés" type="submit" [disabled]="dialogForm.invalid" />
+        </div>
+    </form>
+</p-dialog>

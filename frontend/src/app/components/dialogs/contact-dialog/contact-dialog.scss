@@ -1,0 +1,22 @@
+label {
+    font-weight: semibold;
+    width: 6rem;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.buttons {
+    display: flex;
+    justify-content: end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+p-dialog {
+    width: 25rem;
+}

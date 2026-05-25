@@ -1,0 +1,28 @@
+<input 
+    pInputText
+    fluid 
+    [(ngModel)]="inputText"
+    (focus)="weekPicker.toggle($event)"
+    (change)="handleInputChange($event.target.value)"
+/>
+<p-popover #weekPicker>
+    <table role="grid" class="p-datepicker-day-view" data-pc-section="table">
+    <thead data-pc-section="tableheader">
+        <tr data-pc-section="tableheaderrow">
+            @for (day of weekdays; track day) {
+                <th scope="col" class="p-datepicker-weekday-cell p-datepicker-day-cell" data-pc-section="weekdaycell">
+                    <span 
+                        draggable="false" 
+                        pripple="" 
+                        class="p-ripple p-datepicker-day p-datepicker-weekday" 
+                        [ngClass]="{'p-datepicker-day-selected': currentValues?.includes(day.value)}" 
+                        (click)="handleDateSelect(day.value)"
+                    >
+                        {{day.code}}
+                    </span>
+                </th>
+            }
+        </tr>
+    </thead>
+</table>
+</p-popover>

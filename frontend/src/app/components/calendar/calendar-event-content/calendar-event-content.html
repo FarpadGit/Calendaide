@@ -1,0 +1,56 @@
+<div class="event-content" 
+    [pTooltip]="canShowToolTip ? tooltipContent : undefined" 
+    showDelay="500" 
+    tooltipPosition="top" 
+    (pointerdown)="isDragged = true" 
+    (pointerup)="isDragged = false"
+    [ngStyle]="{'--color': contact?.color}"
+>
+    <div class="event-text" (contextmenu)="handleContextMenu($event)">
+        <p>
+            {{event.title}}
+            @if (displayMode === 'short') { <span>*</span> }
+        </p>
+        @if (displayMode === 'full' && duration > 30) { 
+            <p class="comment" [ngClass]="{'truncated': duration <= 60}">{{displayMessage}}</p> 
+        }
+    </div>
+</div>
+
+<ng-template #tooltipContent>
+    <div class="tooltip">
+        @if(contact) {
+            <div class="contact-container">
+                <h4>Kapcsolat Neve</h4>
+                <p>{{contact.name}}</p>
+            </div>
+            @if(contact.comment) {
+                <ul><li>
+                    <p><b>Megjegyzések:</b></p>
+                    <p class="comment">{{contact.comment}}</p>
+                </li></ul>
+            }
+            <p-divider />
+        }
+        <h4>Esemény Adatai</h4>
+        <ul>
+            <li>
+                <b>Típus:</b><span> {{type}}</span>
+            </li>
+            <li>
+                <b>Időpont:</b><span> {{time}}</span>
+            </li>
+            @if(recurrenceText) {
+                <li>
+                    <b>Sűrűség:</b><span> {{recurrenceText}}</span>
+                </li>
+            }
+            @if(displayMessage) {
+                <li>
+                    <p><b>Megjegyzések:</b></p>
+                    <p class="comment">{{displayMessage}}</p>
+                </li>
+            }
+        </ul>
+    </div>
+</ng-template>

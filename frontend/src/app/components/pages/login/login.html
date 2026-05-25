@@ -1,0 +1,75 @@
+<div class="root-container">
+    <img alt="logo" src="login.jpg">
+    <div class="page-content">
+        <div class="header">
+            <img alt="logo" src="logo.png">
+            <img alt="logo" src="logotype.png">
+        </div>
+        <form [formGroup]="form" class="form-container" (ngSubmit)="handleLogin()">
+            <div>
+                <div class="control-group">
+                    <p-floatlabel variant="on">
+                        <p-iconfield>
+                            <p-inputicon class="pi pi-envelope"></p-inputicon>
+                            <input 
+                                name="email" 
+                                type="text" 
+                                pInputText 
+                                [pTooltip]="form.controls['email'].dirty && form.controls['email'].errors?.['required'] ? 'Adj meg valamilyen felhasználói azonosítót' : undefined" 
+                                tooltipEvent="focus"
+                                tooltipPosition="left"
+                                fluid 
+                                formControlName="email"
+                                required 
+                            />
+                            <label for="email">Email cím</label>
+                        </p-iconfield>
+                    </p-floatlabel>
+                </div>
+                <div class="control-group">
+                    <p-floatlabel variant="on">
+                        <p-iconfield>
+                            <p-inputicon class="pi pi-key"></p-inputicon>
+                            <input 
+                                name="password" 
+                                type="password" 
+                                pInputText 
+                                [pTooltip]="form.controls['password'].dirty && form.controls['password'].errors?.['required'] ? 'Adj meg egy jelszót' : undefined" 
+                                tooltipEvent="focus"
+                                tooltipPosition="left"
+                                fluid 
+                                formControlName="password"
+                                required 
+                            />
+                            <label for="password">Jelszó</label>
+                        </p-iconfield>
+                    </p-floatlabel>
+                </div>
+                @if(hasError()) {
+                    <p class="error">Hibás Felhasználónév vagy Jelszó</p>
+                }
+            </div>
+            <div>
+                <p-button type="submit" fluid [pt]="{root: {style: {marginTop: '1.5rem'}}}" [disabled]="isLoading()">
+                    @if(isLoading()) {
+                        <p-progress-spinner strokeWidth="8" />
+                    }
+                    @else { Belépés }
+                </p-button>
+                <p-divider align="center" [dt]="{contentBackground: 'transparent'}">
+                    <b>vagy</b>
+                </p-divider>
+                <p-button type="button" fluid icon="pi pi-google" label="Belépés Google fiókkal" (onClick)="handleGoogleLogin()" [disabled]="isLoading()" />
+                <p-divider />
+                <p-button type="button" fluid severity="info" (onClick)="handleLoginToDemo()" [disabled]="isLoading()">
+                    Belépés Demo Felhasználóként
+                </p-button>
+                
+                <div class="cta-text">
+                    <span>Még nincs fiókod?</span>
+                    <a [routerLink]="isLoading() ? null : ['/register']">Regisztrálj itt</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div id="calendar-toolbar">
+    <div class="toolbar-container">
+        <div class="header">
+            <app-user-menu />
+        </div>
+        <p-tabs value="0" [dt]="tabsTokens">
+            <p-tablist [pt]="{tabList: {style: {borderRadius: '6px', overflow: 'hidden'}}}">
+                <p-tab value="0" title="Összefoglaló"><span class="pi pi-calendar"></span></p-tab>
+                <p-tab value="1" title="Új Események"><span class="pi pi-plus"></span></p-tab>
+                <p-tab value="2" title="Felhasználói Beállítások"><span class="pi pi-cog"></span></p-tab>
+            </p-tablist>
+            <p-tabpanels [pt]="{root: { style: {width: '100%', minWidth: '22rem', minHeight: '100%'}}}">
+                <p-tabpanel value="0">
+                    <app-event-summary #eventSummaryPanel (onDateSelect)="onDateSelect.emit($event)" />
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    <app-new-events />
+                </p-tabpanel>
+                <p-tabpanel value="2">
+                    <app-user-settings />
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>

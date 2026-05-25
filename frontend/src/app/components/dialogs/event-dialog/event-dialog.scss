@@ -1,0 +1,55 @@
+label {
+    font-weight: 500;
+    width: 6rem;
+}
+
+.field {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+
+    & > div {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+}
+
+.radio-container {
+    @media (max-width: 640px) {
+        flex-direction: column;
+        gap: 0 !important;
+    }
+
+    .radio-field {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+}
+
+.buttons {
+    display: flex;
+    justify-content: end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+p-dialog {
+    width: 25rem;
+}
+
+#rrule-inplace-toggle {
+    grid-column-start: 2;
+
+    .picker-container {
+        display: flex;
+        gap: 0.25rem;
+    }
+
+    .w-full {
+        width: 100%;
+    }
+}

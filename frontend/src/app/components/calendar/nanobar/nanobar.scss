@@ -1,0 +1,25 @@
+.nanobar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+    text-align: center;
+    background-color: var(--p-red-300);
+    z-index: 100;
+    animation: enter 1s ease forwards;
+
+    p-button {
+        position: absolute;
+        top: 0;
+        right: 5vw;
+    }
+}
+
+@keyframes enter {
+    from {
+        height: 0rem;
+    }
+    to {
+        height: 1.5rem;
+    }
+}

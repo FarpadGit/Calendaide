@@ -1,0 +1,10 @@
+<full-calendar #calendar [options]="calendarOptions">
+    <ng-template #eventContent let-arg>
+      <app-calendar-event-content 
+        [event]="asEventsType(arg.event)" 
+        [contact]="getContactForEvent(arg.event.id)"
+        [view]="arg.view.type"
+        (onContextMenu)="handleEventContextMenu($event)"
+      />
+    </ng-template>
+</full-calendar>

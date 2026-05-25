@@ -1,0 +1,18 @@
+<div class="user-menu">
+    <span class="displayname">Üdv {{displayname}}!</span>
+    <p-avatar [label]="displayname[0]?.toUpperCase()" shape="circle" (click)="userPopover.toggle($event)" />
+</div>
+<div class="expander" [ngClass]="{'open': userSettings.saveMode === 'manual'}">
+    @if(userSettings.saveMode === 'manual') {
+        <p-button 
+            label="Mentés" 
+            fluid 
+            severity="success" 
+            [pt]="{root: {style: {marginTop: '0.5rem'}}}" 
+            (onClick)="handleManualSave()"
+        />
+    }
+</div>
+<p-popover #userPopover>
+    <p-button id="logout-btn" label="Kijelentkezés" fluid (onClick)="handleLogout()" />
+</p-popover>
