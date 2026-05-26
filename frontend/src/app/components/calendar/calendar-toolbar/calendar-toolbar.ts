@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output, ViewChild } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import { UserMenu } from '@/components/calendar/calendar-toolbar/user-menu/user-menu';
 import { NewEvents } from '@/components/calendar/calendar-toolbar/new-events/new-events';
 import { EventSummary } from '@/components/calendar/calendar-toolbar/event-summary/event-summary';
@@ -7,7 +8,7 @@ import { TabsModule } from 'primeng/tabs';
 
 @Component({
   selector: 'app-calendar-toolbar',
-  imports: [TabsModule, UserMenu, NewEvents, EventSummary, UserSettings],
+  imports: [TabsModule, UserMenu, NewEvents, EventSummary, UserSettings, NgOptimizedImage],
   templateUrl: './calendar-toolbar.html',
   styleUrl: './calendar-toolbar.scss',
 })

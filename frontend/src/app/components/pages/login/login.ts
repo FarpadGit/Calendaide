@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Auth } from '@/services/auth';
@@ -15,6 +16,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   selector: 'app-login',
   imports: [
     ReactiveFormsModule,
+    NgOptimizedImage,
     FloatLabelModule,
     IconFieldModule,
     InputIconModule,
