@@ -1,7 +1,8 @@
 import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserEvents } from '@/services/user-events';
-import { DatePickerModule } from 'primeng/datepicker';
+import { DatePickerModule, DatePickerPassThrough } from 'primeng/datepicker';
+import { DatePickerDesignTokens } from '@primeuix/themes/types/datepicker';
 import { ButtonModule } from 'primeng/button';
 import { PanelModule } from 'primeng/panel';
 import { dateToText } from '@/utils/datetime';
@@ -19,7 +20,7 @@ export class EventSummary {
   eventsForCurrentDate: eventsType[] = [];
   futureEvents: { date: Date; events: eventsType[] }[] = [];
 
-  datePickerTokens = {
+  datePickerTokens: DatePickerDesignTokens = {
     date: {
       hoverBackground: '{primary.contrastColor}',
     },
@@ -43,6 +44,16 @@ export class EventSummary {
     },
     today: {
       background: '{primary.100}',
+    },
+  };
+
+  datePickerStyles: DatePickerPassThrough = {
+    root: {
+      style: {
+        minWidth: '330px',
+        '--p-button-text-secondary-hover-background': 'var(--p-primary-contrast-color)',
+        '--p-button-text-secondary-active-background': 'var(--p-surface-100)',
+      } as Partial<CSSStyleDeclaration>,
     },
   };
 

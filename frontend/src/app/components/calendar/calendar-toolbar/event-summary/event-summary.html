@@ -5,7 +5,7 @@
         [showButtonBar]="true"
         [selectOtherMonths]="true"
         (onSelect)="handleDateSelect($event)" 
-        [pt]="{root: {style: {minWidth: '330px'}}}"
+        [pt]="datePickerStyles"
         [dt]="datePickerTokens"
     >
         <ng-template #buttonbar let-todayCallback="todayCallback">
