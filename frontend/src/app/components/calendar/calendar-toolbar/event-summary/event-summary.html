@@ -21,16 +21,16 @@
     </p-datepicker>
 
     <p-panel 
-        header="A Nap Eseményei" 
-        [pt]="{content: {style: {display: 'flex', flexDirection: 'column', gap: '1rem', marginTop:'0.25rem' }}}"
+        [header]="`A Nap Eseményei:\n${getDateString(currentSelectedDate)}`" 
+        [pt]="{content: {style: {display: 'flex', flexDirection: 'column', gap: '1rem', marginTop:'0.25rem' }}, header: {style: {whiteSpace: 'pre-wrap'}}}"
     >
         <div class="event-list-container">
-        @for(event of eventsForCurrentDate; track event.id) {
-            <ng-container *ngTemplateOutlet="eventField; context: {event: event, date: currentSelectedDate}" />
-        }
-        @if(eventsForCurrentDate.length === 0) {
-            <div>(nincs esemény)</div>
-        }
+            @for(event of eventsForCurrentDate; track event.id) {
+                <ng-container *ngTemplateOutlet="eventField; context: {event: event, date: currentSelectedDate}" />
+            }
+            @if(eventsForCurrentDate.length === 0) {
+                <div>(nincs esemény)</div>
+            }
         </div>
     </p-panel>
 
