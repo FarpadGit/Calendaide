@@ -53,7 +53,7 @@ export class Calendar {
   }
 
   get saveMode() {
-    return this.userService.getUserSettings()?.saveMode;
+    return this.userService.getUserSettings().saveMode;
   }
 
   get contextMenuOpen() {
