@@ -19,8 +19,12 @@ export function timeDelta(a: Date, b: Date) {
   return a.getTime() - b.getTime();
 }
 
-export function addToDate(a: Date, delta: number) {
+export function addToDateMS(a: Date, delta: number) {
   return new Date(a.getTime() + delta);
+}
+
+export function addToDateMinutes(a: Date, minutes: number) {
+  return addToDateMS(a, minutes * 60 * 1000);
 }
 
 export function dateToText(date: Date, options?: Intl.DateTimeFormatOptions) {

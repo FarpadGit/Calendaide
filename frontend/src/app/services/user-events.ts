@@ -4,7 +4,7 @@ import { User } from '@/services/user';
 import { Auth } from '@/services/auth';
 import { EventApi } from '@/services/API/event.api';
 import { computedPrevious } from '@/utils/computed';
-import { timeDelta, addToDate, getDuration } from '@/utils/datetime';
+import { timeDelta, addToDateMS, addToDateMinutes, getDuration } from '@/utils/datetime';
 import { mod, getObjectDiff } from '@/utils/shared';
 
 @Injectable({
@@ -51,11 +51,11 @@ export class UserEvents {
       if (!e.recurrenceData) return [...prev, e];
 
       const toInstance = (startDate: Date, dayOffset: number) => {
-        const start = addToDate(startDate, dayOffset * 24 * 60 * 60 * 1000);
+        const start = addToDateMinutes(startDate, dayOffset * 24 * 60);
         let end = undefined;
         if (e.end) {
           const duration = getDuration(e.start, e.end);
-          end = addToDate(start, duration);
+          end = addToDateMinutes(start, duration);
         }
         return { ...e, start, end } as eventsType;
       };
@@ -154,7 +154,7 @@ export class UserEvents {
     const delta = timeDelta(newDate, oldDate);
 
     if (!event.recurrenceData) {
-      const newEndDate = event.end ? addToDate(event.end, delta) : undefined;
+      const newEndDate = event.end ? addToDateMS(event.end, delta) : undefined;
       this.editEvent(eventId, { start: newDate, end: newEndDate });
       return;
     }
@@ -177,8 +177,8 @@ export class UserEvents {
 
         // event start time is shifted by how much the user dragged the element (all-day events are shifted to the nearest day)
         const correctedDelta = groupEvent.allDay ? deltaDays * oneDay : delta;
-        if (groupEvent.start) newEventData.start = addToDate(groupEvent.start, correctedDelta);
-        if (groupEvent.end) newEventData.end = addToDate(groupEvent.end, correctedDelta);
+        if (groupEvent.start) newEventData.start = addToDateMS(groupEvent.start, correctedDelta);
+        if (groupEvent.end) newEventData.end = addToDateMS(groupEvent.end, correctedDelta);
 
         let byweekday = groupEvent.recurrenceData.rrule.byweekday;
         let bymonthday = groupEvent.recurrenceData.rrule.bymonthday;
@@ -194,8 +194,8 @@ export class UserEvents {
             const currentMonth = new Date(oldDate);
             currentMonth.setDate(0);
             bymonthday = groupEvent.recurrenceData.rrule.bymonthday.map((d) => {
-              const date = addToDate(currentMonth, d * oneDay);
-              const newDate = addToDate(date, correctedDelta);
+              const date = addToDateMS(currentMonth, d * oneDay);
+              const newDate = addToDateMS(date, correctedDelta);
               return newDate.getDate();
             });
           }

@@ -11,7 +11,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
-import { addToDate, getDuration } from '@/utils/datetime';
+import { addToDateMinutes, getDuration } from '@/utils/datetime';
 
 @Component({
   selector: 'app-fullcalendar',
@@ -136,7 +136,7 @@ export class Fullcalendar {
     if (this.selectedDate !== date.toISOString()) {
       this.selectedDate = date.toISOString();
       let selectEnd;
-      if (calendar.view.type === 'timeGridWeek') selectEnd = addToDate(date, 2 * 60 * 60 * 1000);
+      if (calendar.view.type === 'timeGridWeek') selectEnd = addToDateMinutes(date, 2 * 60);
       if (forceView && calendar.view.type !== 'dayGridMonth')
         calendar.changeView('dayGridMonth', date);
       calendar.select(date, selectEnd);
