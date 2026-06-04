@@ -24,10 +24,6 @@ export class UserEvents {
     return this.userService.currentUserData.events;
   }
 
-  getEventsForCurrentUser() {
-    return this.events();
-  }
-
   getAllScheduledEvents() {
     return this.events().filter((e) => e.start != undefined);
   }
