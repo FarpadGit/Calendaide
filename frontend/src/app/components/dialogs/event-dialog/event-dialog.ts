@@ -101,9 +101,7 @@ export class EventDialog {
       const eventRRule = event.recurrenceData?.rrule;
 
       if (eventRRule) {
-        const isCustomGroupId =
-          event.recurrenceData?.groupId && !event.recurrenceData.groupId.startsWith('group-');
-        recurrenceData.groupId.setValue(isCustomGroupId ? event.recurrenceData!.groupId : null);
+        recurrenceData.groupId.setValue(event.recurrenceData?.groupId ?? null);
         recurrenceData.interval.setValue(eventRRule.interval ?? null);
         recurrenceData.frequency.setValue(eventRRule.freq ?? null);
         recurrenceData.byWeekDay.setValue(eventRRule.byweekday ?? null);
@@ -176,7 +174,7 @@ export class EventDialog {
       const recurrenceData = { ...values.recurrenceData };
       if (recurrenceData.groupId === '') recurrenceData.groupId = null;
       this.eventData.recurrenceData = {
-        groupId: recurrenceData.groupId ?? 'group-' + this.eventData.id,
+        groupId: recurrenceData.groupId ?? null,
         rrule: {
           freq: recurrenceData.frequency!,
           interval: recurrenceData.interval ?? 1,
