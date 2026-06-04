@@ -28,40 +28,40 @@
         />
     </div>
     @if(!isDemoUser){
-            <p-inplace 
-                id="password-inplace-toggle"                 
-                [pt]="{display: {style: {width: '100%', textAlign: 'center'}}}"
-            >
-                <ng-template #display>
-                    <span>Új jelszó beállítása</span>
-                </ng-template>
-                <ng-template #content let-closeCallback="closeCallback">
-                    <div class="field">
-                        <label for="password">Új jelszó</label>
-                        <div class="input-container">
-                            <input 
-                                pInputText 
-                                id="password" 
-                                name="password"
-                                autocomplete="off" 
-                                [(ngModel)]="password" 
-                            />
-                            <p-button 
-                                type="button" 
-                                text 
-                                severity="danger"
-                                (click)="closeCallback($event)" 
-                                [pt]="{root: {style: {height: '100%'}}}"
-                            >
-                                <i class="pi pi-times" pButtonIcon></i>
-                            </p-button>
-                        </div>
+        <p-inplace 
+            id="password-inplace-toggle"                 
+            [pt]="{display: {style: {width: '100%', textAlign: 'center'}}}"
+        >
+            <ng-template #display>
+                <span>Új jelszó beállítása</span>
+            </ng-template>
+            <ng-template #content let-closeCallback="closeCallback">
+                <div class="field">
+                    <label for="password">Új jelszó</label>
+                    <div class="input-container">
+                        <input 
+                            pInputText 
+                            id="password" 
+                            name="password"
+                            autocomplete="off" 
+                            [(ngModel)]="password" 
+                        />
+                        <p-button 
+                            type="button" 
+                            text 
+                            severity="danger"
+                            (click)="closeCallback($event)" 
+                            [pt]="{root: {style: {height: '100%'}}}"
+                        >
+                            <i class="pi pi-times" pButtonIcon></i>
+                        </p-button>
                     </div>
-                </ng-template>
-            </p-inplace>
-        <p-button label="Fiók Törlése" severity="danger" fluid (onClick)="handleDelete($event)" />
+                </div>
+            </ng-template>
+        </p-inplace>
+        <p-button id="delete-account-btn" label="Fiók Törlése" severity="danger" fluid (onClick)="handleDelete($event)" />
     }
-    <p-button label="Beállítások Mentése" fluid (onClick)="handleSettingsChange()" [disabled]="isDemoUser" />
+    <p-button id="submit-btn" label="Beállítások Mentése" fluid (onClick)="handleSettingsChange()" [disabled]="isDemoUser" />
 </form>
 
 <p-confirmpopup />
@@ -70,13 +70,17 @@
     <div class="tooltip">
         <div>
             <b>Auto: </b>
-            <span>Minden változtatás után azonnal elmenti az új állapotot az adatbázisba, beleértve események átmozgatását vagy átméretezését is.
-                    Hasznos ha viszonylag kevés műveletet kell feldolgozni egyszerre, de ha sűrűn változtatsz sok mindent akkor a teljesítmény szenvedhet.</span>
+            <span>
+                Minden változtatás után azonnal elmenti az új állapotot az adatbázisba, beleértve események átmozgatását vagy átméretezését is.
+                Hasznos ha viszonylag kevés műveletet kell feldolgozni egyszerre, de ha sűrűn változtatsz sok mindent akkor a teljesítmény szenvedhet.
+            </span>
         </div>
         <div>
             <b>Manuális: </b>
-            <span>Minden változtatást csak akkor ment el az adatbázisba, a ha megnyomod a 'Mentés' gombot az eszköztáron.
-                Akkor ajánlott, ha sok változtatást akarsz egy nagy kérésben elküldeni a szervernek és nem több tucat kisebb (és lassú) üzenetként.</span>
+            <span>
+                Minden változtatást csak akkor ment el az adatbázisba, a ha megnyomod a 'Mentés' gombot az eszköztáron.
+                Akkor ajánlott, ha sok változtatást akarsz egy nagy kérésben elküldeni a szervernek és nem több tucat kisebb (és lassú) üzenetként.
+            </span>
         </div>
         @if(isDemoUser) {
             <div>(** Demó felhasználóként semmilyen változást nem tudsz elmenteni **)</div>
