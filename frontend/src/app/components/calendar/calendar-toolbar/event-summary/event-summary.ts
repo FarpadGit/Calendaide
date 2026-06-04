@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserEvents } from '@/services/user-events';
 import { DatePickerModule, DatePickerPassThrough } from 'primeng/datepicker';
@@ -13,10 +13,10 @@ import { dateToText } from '@/utils/datetime';
   templateUrl: './event-summary.html',
   styleUrl: './event-summary.scss',
 })
-export class EventSummary {
+export class EventSummary implements OnInit {
   @Output() onDateSelect: EventEmitter<Date> = new EventEmitter();
   private eventsService = inject(UserEvents);
-  currentSelectedDate: Date = new Date();
+  currentSelectedDate: Date = new Date(0);
   eventsForCurrentDate: eventsType[] = [];
   futureEvents: { date: Date; events: eventsType[] }[] = [];
 
@@ -57,6 +57,10 @@ export class EventSummary {
     },
   };
 
+  ngOnInit(): void {
+    this.handleDateSelect(new Date());
+  }
+
   getDateString(date?: Date) {
     if (!date) return '';
     return dateToText(date, { dateStyle: 'short' }) + ' ' + dateToText(date, { weekday: 'long' });
@@ -75,6 +79,7 @@ export class EventSummary {
   }
 
   handleDateSelect(date: Date) {
+    date.setHours(0, 0, 0, 0);
     if (date.getTime() === this.currentSelectedDate.getTime()) return;
 
     const unpackedEvents = this.eventsService.getUnpackedEvents();
