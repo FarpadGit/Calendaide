@@ -40,7 +40,7 @@ export class UserMenu {
     this.userService.saveAll();
   }
 
-  handleLogout() {
-    this.authService.logoutUser();
+  async handleLogout() {
+    await this.authService.logoutUser();
   }
 }
