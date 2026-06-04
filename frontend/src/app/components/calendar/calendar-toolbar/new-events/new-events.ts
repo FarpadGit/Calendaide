@@ -53,7 +53,7 @@ export class NewEvents implements AfterViewInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      const contacts = this.contactsService.getContactsForCurrentUser();
+      const contacts = this.contactsService.contacts();
       this.contacts = contacts.map((c) => ({ name: c.name, value: c.id, color: c.color }));
     });
   }
