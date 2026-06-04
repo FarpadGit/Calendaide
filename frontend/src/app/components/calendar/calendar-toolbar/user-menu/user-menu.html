@@ -5,6 +5,7 @@
 <div class="expander" [ngClass]="{'open': userSettings.saveMode === 'manual'}">
     @if(userSettings.saveMode === 'manual') {
         <p-button 
+            id="manual-save-btn"
             label="Mentés" 
             fluid 
             severity="success" 

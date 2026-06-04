@@ -70,7 +70,7 @@
         },
         "test": {
           "builder": "@ngx-env/builder:unit-test",
-          "options": {}
+          "options": { "runnerConfig": "vitest.config.ts" }
         }
       }
     }
