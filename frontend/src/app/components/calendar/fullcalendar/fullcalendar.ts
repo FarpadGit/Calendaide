@@ -52,13 +52,10 @@ export class Fullcalendar {
     events: (_, success) => {
       this.calendar?.getApi()?.removeAllEvents();
       const allScheduledEvents = this.eventsService.getAllScheduledEvents().map((e) => {
-        const color = this.eventsService.getContactForEvent(e.id)?.color;
         // fullcalendar's groupId is converted into the string 'undefined' if undefined, so we must pass an empty string instead
         return {
           ...e,
           duration: e.allDay ? undefined : { minutes: getDuration(e.start, e.end) },
-          borderColor: color,
-          backgroundColor: color,
           groupId: e.recurrenceData?.groupId ?? '',
           rrule: e.recurrenceData?.rrule,
         } as EventInput;
@@ -171,15 +168,12 @@ export class Fullcalendar {
     const event = this.eventsService.getEventByID(eventId);
     if (!event) return;
 
-    const eventColor = this.eventsService.getContactForEvent(event.id)?.color;
     const calendar = this.calendar?.getApi();
     calendar?.getEventById(eventId)?.remove();
     calendar?.addEvent({
       id: event.id,
       title: event.title,
       allDay: event.allDay,
-      backgroundColor: eventColor,
-      borderColor: eventColor,
       start: event.start,
       end: event.end,
       groupId: event.recurrenceData?.groupId ?? '',
@@ -200,8 +194,6 @@ export class Fullcalendar {
   }
 
   getContactForEvent(eventId: string) {
-    const event = this.eventsService.getEventByID(eventId);
-    if (!event) return;
-    return this.eventsService.getContactForEvent(event.id) ?? undefined;
+    return this.eventsService.getContactForEvent(eventId) ?? undefined;
   }
 }
