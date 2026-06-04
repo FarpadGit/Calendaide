@@ -92,7 +92,17 @@ export class CalendarEventContent {
   }
 
   get displayMessage() {
-    return this.event.comment as string | undefined;
+    return this.event.comment;
+  }
+
+  get padding() {
+    return this.duration > 30 || this.view === 'dayGridMonth' ? '0.3rem 0' : 0;
+  }
+
+  get truncationLines() {
+    if (this.duration >= 90) return 3;
+    if (this.duration >= 60) return 2;
+    return 1;
   }
 
   get duration() {

@@ -4,15 +4,20 @@
     tooltipPosition="top" 
     (pointerdown)="isDragged = true" 
     (pointerup)="isDragged = false"
-    [ngStyle]="{'--color': contact?.color}"
+    [ngStyle]="{'--color': contact?.color, '--padding': padding}"
 >
-    <div class="event-text" (contextmenu)="handleContextMenu($event)">
+    <div 
+        class="event-text" 
+        (contextmenu)="handleContextMenu($event)" 
+        [ngClass]="{'truncated': duration <= 90}"
+        [ngStyle]="{'--lines': truncationLines}"
+    >
         <p>
             {{event.title}}
             @if (displayMode === 'short') { <span>*</span> }
         </p>
-        @if (displayMode === 'full' && duration > 30) { 
-            <p class="comment" [ngClass]="{'truncated': duration <= 60}">{{displayMessage}}</p> 
+        @if (displayMode === 'full' && duration > 60) { 
+            <p class="comment">{{displayMessage}}</p> 
         }
     </div>
 </div>
