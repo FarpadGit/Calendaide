@@ -63,7 +63,7 @@ export class MonthPicker implements OnChanges {
 
     days.forEach((d) => {
       const asNumber = Number.parseInt(d);
-      if (isNaN(asNumber) || asNumber < 0 || asNumber > 31) {
+      if (isNaN(asNumber) || asNumber < 1 || asNumber > 31) {
         this.currentValues = [];
         return;
       }
