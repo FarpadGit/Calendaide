@@ -61,7 +61,7 @@ export class Login {
   }
 
   async handleLoginToDemo() {
-    const result = await this.authService.loginToDemo();
+    const result = this.authService.loginToDemo();
     if (result) this.router.navigateByUrl('/');
   }
 }
