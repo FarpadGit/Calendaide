@@ -26,10 +26,6 @@ export class UserContacts {
     return this.userService.currentUserData.contacts;
   }
 
-  getContactsForCurrentUser() {
-    return this.contacts();
-  }
-
   getActiveContact() {
     return this.getContactByID(this.activeContactId) ?? this.contacts()?.at(0) ?? null;
   }
