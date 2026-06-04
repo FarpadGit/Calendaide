@@ -1,3 +1,5 @@
+export const defaultEventColor: string = '#3788d8';
+
 // modulo function because javascript % is a remainder fn
 export function mod(n: number, m: number) {
   return ((n % m) + m) % m;

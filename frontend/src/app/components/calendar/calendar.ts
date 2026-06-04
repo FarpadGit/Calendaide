@@ -12,8 +12,7 @@ import { Nanobar } from '@/components/calendar/nanobar/nanobar';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';
-
-export const defaultEventColor: string = '#3788d8';
+import { defaultEventColor } from '@/utils/shared';
 
 @Component({
   selector: 'app-calendar',

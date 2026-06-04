@@ -2,7 +2,6 @@ import { Component, effect, EventEmitter, inject, Output, ViewChild } from '@ang
 import { User } from '@/services/user';
 import { UserEvents } from '@/services/user-events';
 import { CalendarEventContent } from '@/components/calendar/calendar-event-content/calendar-event-content';
-import { defaultEventColor } from '@/components/calendar/calendar';
 import { CalendarOptions, EventInput } from '@fullcalendar/core';
 import { EventImpl } from '@fullcalendar/core/internal';
 import hu from '@fullcalendar/core/locales/hu';
@@ -12,6 +11,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
 import { addToDateMinutes, getDuration } from '@/utils/datetime';
+import { defaultEventColor } from '@/utils/shared';
 
 @Component({
   selector: 'app-fullcalendar',

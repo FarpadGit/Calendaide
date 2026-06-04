@@ -1,7 +1,6 @@
 import { Component, effect, EventEmitter, inject, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserContacts } from '@/services/user-contacts';
-import { defaultEventColor } from '@/components/calendar/calendar';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +9,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
+import { defaultEventColor } from '@/utils/shared';
 
 // if this is an Add New dialog and not an Edit one then 'id' will be an empty string
 const defaultData = {
