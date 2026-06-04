@@ -46,9 +46,10 @@ export class API {
   };
 
   async makeRequest(url: string, options?: AxiosRequestConfig<any>) {
-    return this.callAxios(url, options)
+    const response = this.callAxios(url, options)
       .then((res: AxiosResponse) => ({ data: !!res.data ? res.data : true, error: null }))
       .catch(this.errorFn);
+    return response;
   }
 
   setBearer(token: string) {
