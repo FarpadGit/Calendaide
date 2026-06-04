@@ -28,6 +28,19 @@ full-calendar {
             box-shadow: none !important;
         }
 
+        .fc-timegrid-event {
+            --fc-page-bg-color: transparent;
+
+            .fc-event-main {
+                padding: 0;
+            }
+        }
+
+        .fc-v-event {
+            overflow: hidden;
+            border: none;
+        }
+
         // for context menu visibility
         .fc-daygrid-event, .fc-timegrid-event-harness:has(.context-menu-open) {
             z-index: unset !important;
