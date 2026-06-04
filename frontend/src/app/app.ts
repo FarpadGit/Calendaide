@@ -12,7 +12,7 @@ export class App implements OnInit {
   private authService = inject(Auth);
 
   async ngOnInit() {
-    if (this.authService.isDemoUser()) await this.authService.loginToDemo();
+    if (this.authService.isDemoUser()) this.authService.loginToDemo();
     else await this.authService.refreshUser();
   }
 }

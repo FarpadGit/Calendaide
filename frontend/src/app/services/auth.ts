@@ -75,7 +75,7 @@ export class Auth {
     this.oAuthService.initCodeFlow();
   }
 
-  private handleLoginResults(userData: Awaited<ReturnType<typeof this.apiService.login>>) {
+  private handleLoginResults(userData: Awaited<ReturnType<API['login']>>) {
     if (userData == null || !userData.token) return false;
 
     this.userService.currentUserData.setUser(userData.user);
@@ -104,7 +104,7 @@ export class Auth {
     this.userService.currentUserData.events.set(response.events);
   }
 
-  async loginToDemo() {
+  loginToDemo() {
     this.userService.currentUserData.setUser(demoUserData.user);
     this.userService.currentUserData.contacts.set(demoUserData.contacts);
     this.userService.currentUserData.events.set(demoUserData.events);
