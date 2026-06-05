@@ -44,7 +44,7 @@ class Event(BaseModel):
       dtstart: str
       until: Optional[str] = None
     
-    groupId: str
+    groupId: Optional[str] = None
     rrule: RRule
 
   recurrenceData: Optional[RecurrenceData] = None
