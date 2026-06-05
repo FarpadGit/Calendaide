@@ -33,7 +33,7 @@ def DTO_to_Event(dto: EventDTO, user_id: str):
       
     if dto.recurrenceData != Undefined:
         recurrence_data = Event.RecurrenceData(
-            groupid= dto.recurrenceData.groupid,
+            groupId= dto.recurrenceData.groupId,
             rrule= Event.RecurrenceData.RRule(
                 freq= dto.recurrenceData.rrule.freq,
                 interval= dto.recurrenceData.rrule.interval,
