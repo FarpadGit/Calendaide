@@ -1,5 +1,6 @@
 <div class="event-content" 
     [pTooltip]="canShowToolTip ? tooltipContent : undefined" 
+    (contextmenu)="handleContextMenu($event)" 
     showDelay="500" 
     tooltipPosition="top" 
     (pointerdown)="isDragged = true" 
@@ -7,8 +8,7 @@
     [ngStyle]="{'--color': contact?.color, '--padding': padding}"
 >
     <div 
-        class="event-text" 
-        (contextmenu)="handleContextMenu($event)" 
+        class="event-text"
         [ngClass]="{'truncated': duration <= 90}"
         [ngStyle]="{'--lines': truncationLines}"
     >
