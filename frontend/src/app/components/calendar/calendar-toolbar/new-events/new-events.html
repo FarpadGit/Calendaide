@@ -6,7 +6,7 @@
     }"
 >
     <div class="contact-list-container">
-        <p-floatlabel variant="on" [pt]="{root: {style: {width: '100%'}}}">
+        <p-floatlabel variant="on" [pt]="{root: {style: {width: '100%', maxWidth: '15.625rem'}}}">
             <label for="contacts">Kapcsolataim</label>
             <!-- Contacts Select -->
             <p-select #select [options]="contacts" optionLabel="name" optionValue="value" fluid [(ngModel)]="activeContact" inputId="contacts">
