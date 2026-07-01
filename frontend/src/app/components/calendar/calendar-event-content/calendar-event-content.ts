@@ -115,8 +115,9 @@ export class CalendarEventContent {
 
   handleContextMenu(e: PointerEvent) {
     e.preventDefault();
-    let x = this.event.start ? e.pageX : e.screenX;
-    let y = this.event.start ? e.pageY : e.screenY;
+    const mobileScreen = window.matchMedia('(max-width: 1023px)');
+    let x = this.event.start || mobileScreen.matches ? e.pageX : e.screenX;
+    let y = this.event.start || mobileScreen.matches ? e.pageY : e.screenY;
     const pageWidth = document.documentElement.clientWidth;
     const pageHeight = this.event.start ? getPageHeight() : document.documentElement.clientHeight;
 
