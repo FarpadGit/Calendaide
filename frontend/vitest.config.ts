@@ -16,5 +16,9 @@ export default defineConfig({
     },
     mockReset: true,
     setupFiles: 'src/test/setup.ts',
+    exclude: ['src/test/e2e/*.ts'],
+  },
+  optimizeDeps: {
+    exclude: ['chromium-bidi'],
   },
 });
