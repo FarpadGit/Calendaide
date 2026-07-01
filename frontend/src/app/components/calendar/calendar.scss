@@ -7,3 +7,7 @@
         grid-template-columns: 1fr;
     }
 }
+
+p-toast {
+    max-width: calc(100vw - 2 * 20px);
+}
