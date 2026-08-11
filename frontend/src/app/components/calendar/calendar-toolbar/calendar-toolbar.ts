@@ -28,12 +28,14 @@ export class CalendarToolbar {
     tab: {
       borderWidth: 0,
       background: '{primary.50}',
+      color: '{primary.700}',
       active: {
-        background: '{primary.100}',
+        background: '{primary.200}',
+        color: '{primary.700}',
       },
       hover: {
         background: '{primary.100}',
-        color: '{text.mutedColor}',
+        color: '{primary.600}',
       },
     },
     activeBar: {

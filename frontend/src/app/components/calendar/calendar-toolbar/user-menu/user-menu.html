@@ -15,5 +15,8 @@
     }
 </div>
 <p-popover #userPopover>
-    <p-button id="logout-btn" label="Kijelentkezés" fluid (onClick)="handleLogout()" />
+    <p-button id="logout-btn" fluid [pt]="{host: {style: {display: 'block', minWidth: '120px'}}}"  (onClick)="handleLogout()">
+        @if(isLoading()) { <p-progress-spinner strokeWidth="8" /> }
+        @else { Kijelentkezés }
+    </p-button>
 </p-popover>

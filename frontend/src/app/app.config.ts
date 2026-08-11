@@ -35,7 +35,7 @@ export const appConfig: ApplicationConfig = {
           components: {
             avatar: {
               root: {
-                background: '{primary.100}',
+                background: '{primary.200}',
               },
             },
             button: {
