@@ -21,7 +21,7 @@ import { of } from 'rxjs';
 @Component({
   selector:
     'app-fullcalendar, app-calendar-toolbar, app-event-dialog, app-contact-dialog, app-context-menu',
-  template: '<div>Mock</div>',
+  template: '<div>Mock</div><ng-content/>',
 })
 class MockComponent {}
 
@@ -88,6 +88,7 @@ describe('Calendar', () => {
     'should display a context menu for calendar events if one is set to open in service (isOpen: %s)',
     async (isOpen) => {
       eventsSpy.eventWithContextMenuOpen.current.set(isOpen ? mockEventSimple.id : null);
+      (eventsSpy.contextMenuOwner as any).set(isOpen ? 'calendar' : null);
       await fixture.whenStable();
 
       const contextMenu = fixture.nativeElement.querySelector('app-context-menu');

@@ -55,8 +55,8 @@ export class Calendar {
     return this.userService.getUserSettings().saveMode;
   }
 
-  get contextMenuOpen() {
-    return this.eventsService.eventWithContextMenuOpen.current() != null;
+  get contextMenuOwner() {
+    return this.eventsService.contextMenuOwner();
   }
 
   addLoadingToast() {

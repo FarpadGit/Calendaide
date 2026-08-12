@@ -87,6 +87,7 @@
                     <span class="list-marker">{{i + 1}}</span>
                     <div #draggable class="fc-event fc-h-event fc-event-draggable fc-daygrid-event">
                         <app-calendar-event-content 
+                            [container]="toolbarElement"
                             [event]="event" 
                             [contact]="getContact(event.contactId)"
                             (onContextMenu)="handleEventContextMenu($event)" 

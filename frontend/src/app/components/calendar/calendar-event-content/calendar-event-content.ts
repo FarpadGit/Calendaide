@@ -17,6 +17,7 @@ export class CalendarEventContent {
   @Input() event!: eventsType;
   @Input() contact: contactType | undefined;
   @Input() view: calendarViewType | undefined;
+  @Input() container: HTMLElement | undefined;
   @Output() onContextMenu: EventEmitter<{ eventId: string; x: number; y: number }> =
     new EventEmitter();
   isDragged = false;
@@ -116,18 +117,38 @@ export class CalendarEventContent {
   handleContextMenu(e: PointerEvent) {
     e.preventDefault();
     const mobileScreen = window.matchMedia('(max-width: 1023px)');
-    let x = this.event.start || mobileScreen.matches ? e.pageX : e.screenX;
-    let y = this.event.start ? e.pageY : e.screenY;
+    let x = this.container && !mobileScreen.matches ? e.clientX : e.pageX;
+    let y = this.container && !mobileScreen.matches ? e.clientY : e.pageY;
+
     const pageWidth = document.documentElement.clientWidth;
-    const pageHeight = this.event.start ? getPageHeight() : document.documentElement.clientHeight;
+    const pageHeight = getPageHeight();
 
     // tentative approximations for the context menu size
     const contextMenuWidth = 200;
     const contextMenuHeight = 76;
 
-    // if context menu flows out of the document page reposition it
-    if (y + contextMenuHeight > pageHeight) y = pageHeight - contextMenuHeight;
-    if (x + contextMenuWidth > pageWidth) x = pageWidth - contextMenuWidth;
+    let containerWidth = pageWidth;
+    let containerHeight = pageHeight;
+
+    if (this.container) {
+      x += this.container.scrollLeft;
+      y += this.container.scrollTop;
+      let { left, top } = this.container.getBoundingClientRect();
+
+      containerWidth = this.container.scrollWidth + left;
+      containerHeight = this.container.scrollHeight + top;
+
+      // on mobile the toolbar is not scrollable but the page is, so container boundries need to be corrected with page scroll offset
+      if (mobileScreen.matches) {
+        containerWidth += window.scrollX;
+        containerHeight += window.scrollY;
+      }
+    }
+
+    // if context menu flows out of the container element reposition it
+    if (x + contextMenuWidth > containerWidth) x = containerWidth - contextMenuWidth;
+    if (y + contextMenuHeight > containerHeight) y = containerHeight - contextMenuHeight;
+
     this.onContextMenu.emit({ eventId: this.event.id, x, y });
   }
 }

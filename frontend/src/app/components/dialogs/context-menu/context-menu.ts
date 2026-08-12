@@ -26,12 +26,6 @@ export class ContextMenu {
     return this.eventsService.eventWithContextMenuOpen.current()!;
   }
 
-  get cssPostion() {
-    const event = this.eventsService.getEventByID(this.eventId);
-    if (!event?.start && !event?.end) return 'fixed';
-    return 'absolute';
-  }
-
   get left() {
     return this.eventsService.contextMenuPosition.x;
   }

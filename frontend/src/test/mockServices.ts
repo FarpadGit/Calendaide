@@ -72,6 +72,7 @@ export const contactsSpy: mockServiceType<UserContacts> = {
 export const eventsSpy: mockServiceType<UserEvents> = {
   addEvent: vi.fn(),
   contextMenuPosition: { x: 0, y: 0 },
+  contextMenuOwner: vi.mocked(signal(null as ReturnType<UserEvents['contextMenuOwner']>)),
   editEvent: vi.fn(),
   editEvents: vi.fn(),
   eventBeingDragged: vi.mocked(signal(null as ReturnType<UserEvents['eventBeingDragged']>)),

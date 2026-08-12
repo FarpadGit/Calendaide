@@ -6,15 +6,20 @@
     </ng-template>
   </p-toast>
 
-  <app-calendar-toolbar #toolbar (onDateSelect)="fullcalendar.handleDateClick($event, true)" />
-  <app-fullcalendar #fullcalendar (onDateSelect)="toolbar.selectDate($event)" />
+  <app-calendar-toolbar #toolbar (onDateSelect)="fullcalendar.handleDateClick($event, true)">
+    @if (contextMenuOwner === "toolbar") {
+      <app-context-menu (onRemoveEvent)="fullcalendar.handleEventRemove($event)" />
+    }
+  </app-calendar-toolbar>
+  <app-fullcalendar #fullcalendar (onDateSelect)="toolbar.selectDate($event)">    
+    @if (contextMenuOwner === "calendar") {
+      <app-context-menu (onRemoveEvent)="fullcalendar.handleEventRemove($event)" />
+    }
+  </app-fullcalendar>
 </div>
 
 <app-event-dialog (onSave)="fullcalendar.updateCalendar({eventId: $event})" />
 <app-contact-dialog (onSave)="fullcalendar.updateCalendar({contactId: $event})" />
-@if (contextMenuOpen) {
-  <app-context-menu (onRemoveEvent)="fullcalendar.handleEventRemove($event)" />
-}
 @if(saveMode === 'manual') {
   <app-nanobar />
 }

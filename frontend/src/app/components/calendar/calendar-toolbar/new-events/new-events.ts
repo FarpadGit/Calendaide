@@ -70,6 +70,10 @@ export class NewEvents implements AfterViewInit, OnDestroy {
     this.elementChangeSub?.unsubscribe();
   }
 
+  get toolbarElement() {
+    return document.querySelector('#calendar-toolbar') as HTMLElement;
+  }
+
   get activeContact() {
     return this.contactsService.getActiveContact()?.id ?? '';
   }

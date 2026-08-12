@@ -1,4 +1,4 @@
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { UserContacts } from '@/services/user-contacts';
 import { User } from '@/services/user';
 import { Auth } from '@/services/auth';
@@ -17,6 +17,13 @@ export class UserEvents {
   private apiService = inject(EventApi);
   eventWithContextMenuOpen = computedPrevious<string | null>();
   contextMenuPosition: { x: number; y: number } = { x: 0, y: 0 };
+  contextMenuOwner = computed(() => {
+    const eventID = this.eventWithContextMenuOpen.current();
+    if (!eventID) return null;
+    const event = this.getEventByID(eventID);
+    if (event?.start) return 'calendar';
+    return 'toolbar';
+  });
   eventWithEditMenuOpen = signal<string | null>(null);
   eventBeingDragged = signal<string | null>(null);
 
