@@ -18,6 +18,7 @@
 
     .background-container {
         z-index: -1;
+        pointer-events: none;
 
         @media (max-width: 1023px) {
             position: absolute;
