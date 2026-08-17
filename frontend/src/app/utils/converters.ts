@@ -33,8 +33,18 @@ export function parseUserData(userData: {
 export function eventTypeToJSON(event: Partial<eventsType>) {
   const result = {
     ...event,
-    start: event.start?.toISOString(),
-    end: event.end?.toISOString(),
+    start: toCorrectedISOString(event.start),
+    end: toCorrectedISOString(event.end),
   };
   return result;
+}
+
+// start & end times are converted to datetime on backend database and need to be corrected with the browsers local timezone
+// (recurrence data are stored as ISO strings which can be readily converted back to javascript dates)
+function toCorrectedISOString(date: Date | undefined) {
+  if (!date) return undefined;
+  const _date = new Date(date);
+  const tzOffset = -1 * _date.getTimezoneOffset();
+  _date.setMinutes(_date.getMinutes() + tzOffset);
+  return _date.toISOString();
 }
