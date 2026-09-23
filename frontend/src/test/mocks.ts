@@ -1,12 +1,17 @@
-import { userSettings } from '@/types.usersettings';
 import { addToDateMinutes } from '@/utils/datetime';
 
 const now = new Date();
 const nextMonth = new Date(now);
 nextMonth.setMonth(now.getMonth() + 1);
 
-export const mockUserSettings: userSettings = {
+export const mockUserSettings: NonNullable<DeepRequired<userType['settings']>> = {
   saveMode: 'auto',
+  businessHours: [],
+  bookingData: {
+    bookingEnabled: false,
+    bookingId: '',
+    bookingDuration: 60,
+  },
 };
 
 export const mockUser: userType = {
@@ -37,10 +42,16 @@ export const mockContacts: contactType[] = [
     color: '#00ff00',
     comment: 'Fake comment for contact 4',
   },
+  {
+    id: 'mockContact5ID',
+    name: 'Mock Contact 5',
+    bookingPassword: 'FakeBookingPassword123',
+  },
 ];
 
 export const mockContactSimple = mockContacts[0];
 export const mockContactFull = mockContacts[3];
+export const mockContactWithPassword = mockContacts[4];
 
 export const mockEvents: eventsType[] = [
   {
@@ -165,5 +176,6 @@ export function mockResponse(data: any, error?: string) {
   return {
     data,
     error: error ?? null,
+    status: error ? 500 : 200,
   };
 }

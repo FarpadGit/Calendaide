@@ -18,6 +18,8 @@ export class CalendarEventContent {
   @Input() contact: contactType | undefined;
   @Input() view: calendarViewType | undefined;
   @Input() container: HTMLElement | undefined;
+  @Input() tooltipDisabled: boolean = false;
+  @Input() isSelected: boolean = false;
   @Output() onContextMenu: EventEmitter<{ eventId: string; x: number; y: number }> =
     new EventEmitter();
   isDragged = false;
@@ -111,7 +113,7 @@ export class CalendarEventContent {
   }
 
   get canShowToolTip() {
-    return this.view !== undefined && !this.isDragged;
+    return !this.tooltipDisabled && !this.isDragged;
   }
 
   handleContextMenu(e: PointerEvent) {

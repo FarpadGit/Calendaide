@@ -3,9 +3,50 @@ form {
     flex-direction: column;
     gap: 1rem;
 
+    @mixin field-group {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .field-group {
+        @include field-group;
+
+        &-inner {
+            @include field-group;
+
+            &::after {
+                content: "";
+                display: block;
+                width: 100%;
+                height: 2px;
+                background-color: var(--p-primary-600);
+                margin-top: 10px;
+            }
+        }        
+
+        .business-hours {
+            display: grid;
+            gap: 0.5rem;
+            grid-template-columns: 1fr 1fr 1fr;
+            align-items: flex-end;
+            margin-bottom: 20px;
+
+            .field:first-child {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+
     .field {
         display: flex;
         flex-direction: column;
+
+        &.row {
+            flex-direction: row;
+            align-items: center;
+        }
     
         label {
             width: fit-content;
@@ -18,25 +59,25 @@ form {
                 flex-grow: 1;
             }
         }
-    
-        .hint-label {
-            display: flex;
-            justify-content: space-between;
-    
-            .hint-icon {
-                user-select: none;
-                background-color: var(--p-primary-50);
-                border-radius: 9999px;
-                width: 1.25rem;
-                height: 1.25rem;
-                text-align: center;
-            }
-        }
     }
 }
 
-.tooltip {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+p-toggleswitch {
+    flex-shrink: 0;
+}
+
+.error-label {
+    color: red;
+    font-size: small;
+    grid-column: 1 / -1;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    appearance: textfield;
+    -moz-appearance: textfield;
 }

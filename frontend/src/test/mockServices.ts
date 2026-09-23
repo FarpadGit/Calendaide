@@ -4,10 +4,12 @@ import { API } from '@/services/API/api';
 import { ContactApi } from '@/services/API/contact.api';
 import { EventApi } from '@/services/API/event.api';
 import { UserApi } from '@/services/API/user.api';
+import { BookingApi } from '@/services/API/booking.api';
 import { Auth } from '@/services/auth';
 import { UserContacts } from '@/services/user-contacts';
 import { UserEvents } from '@/services/user-events';
 import { User } from '@/services/user';
+import { Booking } from '@/services/booking';
 import {
   mockContacts,
   mockEvents,
@@ -45,6 +47,11 @@ export const userApiSpy: mockServiceType<UserApi> = {
   updateUser: vi.fn(),
   saveAllUserData: vi.fn(),
 };
+export const bookingApiSpy: mockServiceType<BookingApi> = {
+  readEvents: vi.fn(),
+  readEventsForContact: vi.fn(),
+  bookEvents: vi.fn(),
+};
 
 export const authSpy: mockServiceType<Auth> = {
   authenticate: vi.fn(),
@@ -68,6 +75,7 @@ export const contactsSpy: mockServiceType<UserContacts> = {
   getContactByID: vi.fn((id) => mockContacts.find((c) => c.id === id)),
   removeContact: vi.fn(),
   setActiveContact: vi.fn(),
+  isBookingEnabled: vi.fn(() => false),
 };
 export const eventsSpy: mockServiceType<UserEvents> = {
   addEvent: vi.fn(),
@@ -108,6 +116,26 @@ export const userSpy: mockServiceType<User> = {
   getUserSettings: vi.fn(() => mockUserSettings),
   saveAll: vi.fn(),
   saveUserSettings: vi.fn(),
+};
+
+export const bookingSpy: Omit<MockedObject<Booking>, ''> = {
+  bookEvents: vi.fn(),
+  getEventByID: vi.fn(() => mockEvents[0]),
+  getSelectedEvent: vi.fn(() => mockEvents[0]),
+  getUnscheduledEvents: vi.fn(() => mockUnscheduledEvents),
+  isEventEditable: vi.fn(() => false),
+  hasChangedEvent: vi.fn(() => false),
+  readEvents: vi.fn(),
+  readEventsForContact: vi.fn(),
+  resetEvents: vi.fn(),
+  scheduleEvent: vi.fn(),
+  selectNewEvent: vi.fn(),
+  setBookableEvents: vi.fn(),
+  userData: {
+    bookingId: vi.mocked(signal('' as ReturnType<Booking['userData']['bookingId']>)),
+    events: vi.mocked(signal([] as ReturnType<Booking['userData']['events']>)),
+    settings: vi.mocked(signal(null as ReturnType<Booking['userData']['settings']>)),
+  },
 };
 
 export const routerSpy: Partial<MockedObject<Router>> = {

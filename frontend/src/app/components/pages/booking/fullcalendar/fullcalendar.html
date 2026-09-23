@@ -1,0 +1,13 @@
+<full-calendar #calendar [options]="calendarOptions">
+    <ng-template #eventContent let-arg>
+      <app-calendar-event-content 
+        [event]="asEventsType(arg.event)" 
+        [contact]="getContactForEvent(arg.event.id)"
+        [view]="arg.view.type"
+        [tooltipDisabled]="true"
+        [isSelected]="selectedEvent?.id === arg.event.id"
+        (pointerdown)="onNewEventSelect.emit(arg.event.id)"
+      />
+    </ng-template>
+</full-calendar>
+<ng-content />

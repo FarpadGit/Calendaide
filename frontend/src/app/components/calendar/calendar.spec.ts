@@ -13,7 +13,7 @@ import { EventDialog } from '@/components/dialogs/event-dialog/event-dialog';
 import { ContactDialog } from '@/components/dialogs/contact-dialog/contact-dialog';
 import { MessageService } from 'primeng/api';
 import { apiSpy, userSpy, eventsSpy } from '@/../test/mockServices';
-import { mockEventSimple } from '@/../test/mocks';
+import { mockEventSimple, mockUserSettings } from '@/../test/mocks';
 import { userSettingValues } from '@/types.usersettings';
 import { of } from 'rxjs';
 
@@ -108,7 +108,7 @@ describe('Calendar', () => {
   it.each(userSettingValues.saveMode)(
     'should display a warning message if user save mode is manual (saveMode: %s)',
     async (saveMode) => {
-      userSpy.getUserSettings.mockReturnValue({ saveMode });
+      userSpy.getUserSettings.mockReturnValue({ ...mockUserSettings, saveMode });
       await fixture.whenStable();
 
       const nanobar = fixture.nativeElement.querySelector('app-nanobar');

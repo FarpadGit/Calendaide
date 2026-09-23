@@ -52,3 +52,27 @@ export function getObjectDiff<T extends object>(previous: T, current: T) {
 
   return Object.keys(changes).length === 0 ? null : changes;
 }
+
+// deeply merge multiple nested objects
+export function mergeDeep<T>(target: T, ...sources: T[]): T {
+  if (!sources.length) return target;
+  const source = sources.shift();
+
+  type TKey = keyof typeof target;
+  type SKey = keyof typeof source;
+
+  if (isObject(target) && isObject(source)) {
+    for (const key in source) {
+      if (isObject(source[key as SKey])) {
+        if (!target[key as TKey]) target[key as TKey] = {} as any;
+        mergeDeep(target[key as TKey], source[key as SKey]);
+      } else {
+        target[key as TKey] = source[key as SKey];
+      }
+    }
+  }
+
+  return mergeDeep(target, ...sources);
+}
+
+const isObject = (item: any) => item && typeof item === 'object' && !Array.isArray(item);

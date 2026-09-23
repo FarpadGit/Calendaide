@@ -15,6 +15,7 @@ def DTO_to_Contact(dto: ContactDTO):
       name= dto.name,
       comment= dto.comment if dto.comment != Undefined else None,
       color= dto.color if dto.color != Undefined else None,
+      bookingPassword= dto.bookingPassword if dto.bookingPassword != Undefined else None,
    )
 
 def DTO_to_Event(dto: EventDTO, user_id: str):

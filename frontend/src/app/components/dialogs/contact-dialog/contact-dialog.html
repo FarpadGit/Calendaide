@@ -13,6 +13,40 @@
             <label for="comment">Megjegyzés</label>
             <textarea id="comment" name="comment" rows="5" cols="30" pTextarea autoResize [(ngModel)]="contactData.comment"></textarea>
         </div>
+        @if(isBookingEnabled) {
+            <p-inplace 
+                id="passwordSetter"
+                [pt]="{display: {style: {width: '100%', textAlign: 'center'}}}" 
+                [active]="contactData.bookingPassword != undefined"
+            >
+                <ng-template #display>
+                    <span>Jelszó beállítása külső időpontfoglalóknak</span>
+                </ng-template>
+                <ng-template #content let-closeCallback="closeCallback">
+                    <div class="field">
+                        <label for="bookingPassword">Foglalási jelszó</label>
+                        <div class="input-container">
+                            <input 
+                                pInputText 
+                                id="bookingPassword" 
+                                name="bookingPassword"
+                                autocomplete="off" 
+                                [(ngModel)]="contactData.bookingPassword"
+                            />
+                            <p-button 
+                                type="button" 
+                                text 
+                                severity="danger"
+                                (click)="contactData.bookingPassword = undefined;closeCallback($event)" 
+                                [pt]="{root: {style: {height: '100%'}}}"
+                            >
+                                <i class="pi pi-times" pButtonIcon></i>
+                            </p-button>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-inplace>
+        }
         <div class="buttons">
             <p-button label="Mégse" severity="secondary" type="button" (click)="isVisible = false" />
             <p-button label="Mentés" type="submit" [disabled]="formData.invalid" />

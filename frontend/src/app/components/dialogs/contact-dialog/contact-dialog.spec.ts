@@ -4,7 +4,7 @@ import { userEvent } from 'vitest/browser';
 import { ContactDialog } from './contact-dialog';
 import { contactsSpy } from '@/../test/mockServices';
 import { UserContacts } from '@/services/user-contacts';
-import { mockContactSimple, mockContactFull } from '@/../test/mocks';
+import { mockContactSimple, mockContactFull, mockContactWithPassword } from '@/../test/mocks';
 
 describe('ContactDialog', () => {
   let component: ContactDialog;
@@ -75,6 +75,26 @@ describe('ContactDialog', () => {
     expect(submitButton).toBeVisible();
     expect(cancelButton).toBeVisible();
   });
+
+  it.each([true, false])(
+    'should display an input for a booking password if external booking is enabled in user settings (enabled: %s)',
+    async (bookingEnabled) => {
+      contactsSpy.isBookingEnabled.mockReturnValue(bookingEnabled);
+      if (bookingEnabled) {
+        contactsSpy.contactWithEditMenuOpen.set(mockContactWithPassword.id);
+        contactsSpy.getContactByID.mockReturnValueOnce(mockContactWithPassword);
+      } else {
+        contactsSpy.contactWithEditMenuOpen.set(mockContactSimple.id);
+        contactsSpy.getContactByID.mockReturnValueOnce(mockContactSimple);
+      }
+      await fixture.whenStable();
+
+      const passwordInput: HTMLElement = fixture.nativeElement.querySelector('#passwordSetter');
+
+      if (bookingEnabled) expect(passwordInput).toBeVisible();
+      else expect(passwordInput).toBeFalsy();
+    },
+  );
 
   it.each([
     ['create new contact', undefined],

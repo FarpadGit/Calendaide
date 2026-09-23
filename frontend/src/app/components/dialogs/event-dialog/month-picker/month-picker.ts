@@ -28,6 +28,7 @@ export class MonthPicker implements OnChanges {
   currentValues: number[] | null = [];
   inputText: string = '';
   onInputChanged: Function | null = null;
+  onInputTouched: Function | null = null;
 
   ngOnChanges(): void {
     if (this.month == null) this.month = new Date();
@@ -114,5 +115,7 @@ export class MonthPicker implements OnChanges {
   registerOnChange(fn: Function): void {
     this.onInputChanged = fn;
   }
-  registerOnTouched(fn: Function): void {}
+  registerOnTouched(fn: Function): void {
+    this.onInputTouched = fn;
+  }
 }

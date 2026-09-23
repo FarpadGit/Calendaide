@@ -10,6 +10,7 @@ describe('EventSummary', () => {
   let fixture: ComponentFixture<EventSummary>;
 
   const today = new Date();
+  today.setHours(0, 0, 0, 0);
   const afterTomorrow = new Date(today);
   afterTomorrow.setDate(afterTomorrow.getDate() + 2);
   const unpackedEvents: eventsType[] = [

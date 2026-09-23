@@ -5,6 +5,16 @@ type userType = {
   // server side stored settings
   settings?: {
     saveMode?: 'auto' | 'manual';
+    businessHours?: {
+      daysOfWeek: number[];
+      startTime: string;
+      endTime: string;
+    }[];
+    bookingData?: {
+      bookingEnabled?: boolean;
+      bookingId?: string;
+      bookingDuration?: number;
+    };
   };
 };
 
@@ -15,6 +25,7 @@ type contactType = {
   name: string;
   comment?: string;
   color?: string;
+  bookingPassword?: string;
 };
 
 type eventsType = {

@@ -23,9 +23,9 @@ def get_user_data(credentials: Credentials = None, oauth_credentials: OauthCrede
 
    events = []
    with db.events.find({"userid": str(user.id)}) as cursor:
-      for event in cursor: 
-         _event = Event.model_validate(event)
-         events.append(_event)
+      for _event in cursor: 
+         event = Event.model_validate(_event)
+         events.append(event)
     
    return __to_calendar_data(user, events) 
 
@@ -40,23 +40,31 @@ def create_user(user: User):
       contacts= [Contact(id="contact1", name="Egyéb események")]
    )
    if user.passwordHash is not None: new_user.passwordHash = PasswordHasher().hash(user.passwordHash)
-   db.users.insert_one(trimmed_dict(User.model_dump(new_user)))
+   _new_user = trimmed_dict(User.model_dump(new_user))
+   db.users.insert_one(_new_user)
    return True
 
-def update_user(user_id: str, user: UserModifiableDTO):
+def update_user(user_id: str, userDTO: UserModifiableDTO):
    db_user = db.users.find_one({"_id": ObjectId(user_id)})
-   if not db_user: return
-   _user = User.model_validate(db_user)
+   if not db_user: return False
+   user = User.model_validate(db_user)
    
-   if user.displayname != Undefined: _user.displayname = user.displayname
-   if user.settings != Undefined: _user.settings = user.settings
-   if user.password != Undefined: _user.passwordHash = PasswordHasher().hash(user.password)
+   if userDTO.displayname != Undefined: user.displayname = userDTO.displayname
+   if userDTO.settings != Undefined: user.settings = userDTO.settings
+   if userDTO.password != Undefined: user.passwordHash = PasswordHasher().hash(userDTO.password)
 
-   set = trimmed_dict(User.model_dump(_user))
+   set = trimmed_dict(User.model_dump(user))
    unset = trimmed_dict({
-      "settings": "" if user.settings == None else None
+      "settings": "" if userDTO.settings == None else None
    })
    db.users.update_one({"_id": ObjectId(user_id)}, {"$set": set, "$unset": unset})
+   return True
+
+def check_for_conflicting_data(user_id: str, userDTO: UserModifiableDTO):
+   if userDTO.settings.bookingData.bookingId:
+      conflicting_user = db.users.find_one({"settings.bookingData.bookingId": userDTO.settings.bookingData.bookingId, "_id": {"$not": {"$eq": ObjectId(user_id)}}})
+      if conflicting_user is not None: return "conflict"
+   return False
 
 def delete_user(user_id: str):
    db.users.delete_one({"_id": ObjectId(user_id)})
@@ -70,17 +78,18 @@ def set_user_data(user_id: str, calendar_data: CalendarData):
    if calendar_data.user.settings != Undefined: user_data.settings = calendar_data.user.settings
 
    contacts_data = []
-   for contact in calendar_data.contacts:
-      _contact = DTO_to_Contact(contact)
-      contacts_data.append(_contact)
+   for contactDTO in calendar_data.contacts:
+      contact = DTO_to_Contact(contactDTO)
+      contacts_data.append(contact)
    user_data.contacts = contacts_data
 
    db.users.update_one({"_id": ObjectId(user_id)}, {"$set": trimmed_dict(User.model_dump(user_data))})
    db.events.delete_many({"userid": user_id})
 
-   for event in calendar_data.events:
-      _event = DTO_to_Event(event, user_id)
-      db.events.insert_one(trimmed_dict(Event.model_dump(_event)))
+   for eventDTO in calendar_data.events:
+      event = DTO_to_Event(eventDTO, user_id)
+      _event = trimmed_dict(Event.model_dump(event))
+      db.events.insert_one(_event)
 
 
 def __to_calendar_data(user: User, events: list[Event]):
@@ -98,6 +107,7 @@ def __to_calendar_data(user: User, events: list[Event]):
       "color": c.color,
       "comment": c.comment,
       "userId": str(user.id),
+      "bookingPassword": c.bookingPassword,
       }), user.contacts))
    
    events_data = list()   

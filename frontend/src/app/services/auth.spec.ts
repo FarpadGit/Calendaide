@@ -7,7 +7,7 @@ import { API } from '@/services/API/api';
 import { UserApi } from '@/services/API/user.api';
 import { User } from '@/services/user';
 import { apiSpy, routerSpy, userApiSpy, userSpy } from '@/../test/mockServices';
-import { mockUser } from '@/../test/mocks';
+import { mockUser, mockUserSettings } from '@/../test/mocks';
 import { demoUserData } from '@/utils/demo';
 import { OAuthSuccessEvent, OAuthService } from 'angular-oauth2-oidc';
 import { Subject } from 'rxjs';
@@ -89,8 +89,9 @@ describe('Auth', () => {
     (isDemo, saveMode, expected) => {
       if (isDemo) sessionStorage.setItem(sessionStorageKey, demoUserToken);
       else sessionStorage.removeItem(sessionStorageKey);
-      if (saveMode === 'auto') userSpy.getUserSettings.mockReturnValueOnce({ saveMode: 'auto' });
-      else userSpy.getUserSettings.mockReturnValueOnce({ saveMode: 'manual' });
+      if (saveMode === 'auto')
+        userSpy.getUserSettings.mockReturnValueOnce({ ...mockUserSettings, saveMode: 'auto' });
+      else userSpy.getUserSettings.mockReturnValueOnce({ ...mockUserSettings, saveMode: 'manual' });
 
       expect(service.canAutosaveToServer()).toBe(expected);
     },
@@ -100,10 +101,14 @@ describe('Auth', () => {
     const mockEmail = 'fake.email@mail.com';
     const mockPassword = 'fakepassword123';
     if (success) {
-      userApiSpy.createUser.mockResolvedValueOnce({ data: true, error: null });
+      userApiSpy.createUser.mockResolvedValueOnce({ data: true, error: null, status: 200 });
       apiSpy.login.mockResolvedValueOnce(mockServerLoginResponse);
     } else {
-      userApiSpy.createUser.mockResolvedValueOnce({ data: null, error: 'mockErrorMessage' });
+      userApiSpy.createUser.mockResolvedValueOnce({
+        data: null,
+        error: 'mockErrorMessage',
+        status: 400,
+      });
     }
 
     const result = await service.registerUser(mockEmail, mockPassword);

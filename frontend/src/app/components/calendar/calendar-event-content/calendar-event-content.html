@@ -5,6 +5,7 @@
     tooltipPosition="top" 
     (pointerdown)="isDragged = true" 
     (pointerup)="isDragged = false"
+    [ngClass]="{'selected' : isSelected, 'dragged': isDragged}"
     [ngStyle]="{'--color': contact?.color, '--padding': padding}"
 >
     <div 

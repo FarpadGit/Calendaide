@@ -124,11 +124,13 @@ export const calendarTests = () =>
         tabpanel = page.getByRole('tabpanel');
       });
 
-      test('displays at least 2 input components for save mode, username and a Save settings button', async ({
+      test('displays at least 4 components for save mode, business hours, external booking, username and a Save settings button', async ({
         page,
       }) => {
         await expectLabeledComponentToBeVisible(tabpanel, /mentési mód/i, '#savemode');
-        await expect(tabpanel.getByLabel(/felhasználó név/i)).toBeVisible();
+        await expect(tabpanel.getByLabel(/nyitvatartási idők/i)).toBeVisible();
+        await expect(tabpanel.getByLabel(/időpontfoglalás/i)).toBeVisible();
+        await expect(tabpanel.getByLabel(/megjelenítési név/i)).toBeVisible();
         await expect(tabpanel.getByRole('button', { name: /beállítások mentése/i })).toBeVisible();
       });
     });

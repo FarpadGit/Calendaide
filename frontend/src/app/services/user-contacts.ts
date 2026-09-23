@@ -76,4 +76,8 @@ export class UserContacts {
       if (diff) this.apiService.updateContact(contactId, diff);
     }
   }
+
+  isBookingEnabled() {
+    return this.userService.currentUserData.user()?.settings.bookingData.bookingEnabled ?? false;
+  }
 }

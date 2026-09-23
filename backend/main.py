@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
-from controllers import auth, users, contacts, events
+from controllers import auth, users, contacts, events, booking
 
 app = FastAPI()
 
@@ -21,3 +21,4 @@ app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(contacts.router)
 app.include_router(events.router)
+app.include_router(booking.router)

@@ -5,7 +5,7 @@ import { UserMenu } from './user-menu';
 import { Auth } from '@/services/auth';
 import { User } from '@/services/user';
 import { authSpy, userSpy } from '@/../test/mockServices';
-import { mockUser } from '@/../test/mocks';
+import { mockUser, mockUserSettings } from '@/../test/mocks';
 
 describe('UserMenu', () => {
   let component: UserMenu;
@@ -45,7 +45,7 @@ describe('UserMenu', () => {
   it.each(['auto', 'manual'] as const)(
     'should display a Manual Save button if user save mode is set to "manual" (save mode: %s)',
     async (saveMode) => {
-      userSpy.getUserSettings.mockReturnValue({ saveMode });
+      userSpy.getUserSettings.mockReturnValue({ ...mockUserSettings, saveMode });
       await fixture.whenStable();
 
       const saveButton = fixture.nativeElement.querySelector('#manual-save-btn button');
@@ -58,7 +58,7 @@ describe('UserMenu', () => {
     },
   );
   it('should send request to service to manually save all user data', async () => {
-    userSpy.getUserSettings.mockReturnValue({ saveMode: 'manual' });
+    userSpy.getUserSettings.mockReturnValue({ ...mockUserSettings, saveMode: 'manual' });
     await fixture.whenStable();
     const saveButton = fixture.nativeElement.querySelector('#manual-save-btn button');
 

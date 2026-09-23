@@ -1,6 +1,6 @@
 import json
 from typing import Annotated
-from fastapi import APIRouter, Header
+from fastapi import APIRouter, Header, HTTPException
 from dto import EncryptedData, UserModifiableDTO, CalendarData
 from services import users, events, sessions
 from utils.decryption import decrypt
@@ -13,7 +13,10 @@ async def update_user(encrypted: EncryptedData, session_header: Annotated[str | 
     body = UserModifiableDTO.model_validate(json.loads(decripted_data))
     print(body)
     user_id = sessions.get_user_in_session(session_header)
-    users.update_user(user_id, body)
+    errors = users.check_for_conflicting_data(user_id, body)
+    if(errors == "conflict"): raise HTTPException(status_code=409, detail="conflicting data in database")
+    success = users.update_user(user_id, body)
+    if not success: raise HTTPException(status_code=400, detail="failed to save user settings")
 
 @router.delete("/", status_code=204)
 async def delete_user(session_header: Annotated[str | None, Header(alias="Authorization")] = None):

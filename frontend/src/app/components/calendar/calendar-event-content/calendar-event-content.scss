@@ -6,6 +6,12 @@
     color: var(--color, var(--defaultColor));
     padding: var(--padding);
     font-weight: 600;
+    touch-action: none;
+
+    &.selected {
+        --selectedColor: var(--p-primary-600);
+        background-color: var(--selectedColor);
+    }
 
     &::before {
         content: '';

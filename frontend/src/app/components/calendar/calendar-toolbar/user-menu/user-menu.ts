@@ -5,7 +5,6 @@ import { User } from '@/services/user';
 import { AvatarModule } from 'primeng/avatar';
 import { PopoverModule } from 'primeng/popover';
 import { ButtonModule } from 'primeng/button';
-import { userSettings } from '@/types.usersettings';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
@@ -17,7 +16,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 export class UserMenu {
   private authService = inject(Auth);
   private userService = inject(User);
-  userSettings = {} as userSettings;
+  userSettings = {} as NonNullable<userType['settings']>;
   isLoading = signal(false);
 
   constructor() {

@@ -1,0 +1,148 @@
+<p-panel 
+    header="Időpontfoglalás" 
+    [pt]="{
+        root: {style: {background: 'none'}},
+        content: {style: {display: 'flex', flexDirection: 'column', gap: '1rem', marginTop:'0.25rem'}}
+    }"
+>
+    @if(submitResult() !== "success") {
+        <div>Foglalj időpontot <span style="text-transform: capitalize;">{{displayName}}</span> naptárába!</div>
+        <div>Ragadj meg egy foglalható esemény blokkot és húzd a naptár megfelelő időszakaszába.</div>
+
+        <p-selectbutton
+            id="bookingDestinationSelect"
+            [pt]="{pcToggleButton: {root: {style: {textAlign: 'center', fontSize: 'small'}}}}"
+            fluid
+            [options]="selectOptions" 
+            optionLabel="label" 
+            optionValue="value" 
+            [(ngModel)]="contactData.bookIntoContact"
+            (onChange)="handleSelectChange()"
+            [allowEmpty]="false"
+        />
+        
+        @if(contactData.bookIntoContact && contactData.submitResult() !== "success") {
+            <p-panel [dt]="{header: {padding: 'calc(1.125rem/2)'}}">
+                <div>
+                    <div class="field">
+                        <label for="contactName">Kapcsolat neve</label>
+                        <input 
+                            pInputText 
+                            id="contactName" 
+                            name="contactName" 
+                            autocomplete="off"
+                            [(ngModel)]="contactData.name"
+                        />
+                    </div>
+                    <div class="field">
+                        <label for="contactPassword">Jelszó</label>
+                        <input 
+                            pInputText 
+                            type="password"
+                            id="contactPassword" 
+                            name="contactPassword" 
+                            autocomplete="off"
+                            [(ngModel)]="contactData.password"
+                        />
+                    </div>
+                </div>
+            </p-panel>
+            <p-button id="credentialsSubmitBtn" fluid (onClick)="submitContactCredentials()">
+                @if(contactData.submitResult() === "loading") { <p-progress-spinner strokeWidth="8" /> }
+                @else { Küldés }
+            </p-button>
+            @if(contactData.submitResult() === "error") { 
+                <div class="error-msg">Hibás név vagy jelszó!</div> 
+            }
+        }
+
+        <!-- Unscheduled Events Panel -->
+        @if(!contactData.bookIntoContact || contactData.submitResult() === "success") {
+            <p-panel [header]="contactData.bookIntoContact ? contactData.name: 'Foglalható Események'">
+                <ng-template #icons>
+                    <p-button id="reset-btn" icon="pi pi-times" pTooltip="Visszaállítás" tooltipPosition="top" severity="secondary" rounded text (click)="resetScheduling()" />
+                </ng-template>
+                <div class="draggable-event-queue">
+                    @if(contactData.wasListEmpty) {
+                        <div>(Nincs ütemezhető esemény)</div>
+                    }
+                    @for(event of unscheduledEvents; track event.id; let i = $index) {
+                        <div>
+                            <span class="list-marker">{{i + 1}}</span>
+                            <div #draggable class="fc-event fc-h-event fc-event-draggable fc-daygrid-event">
+                                <app-calendar-event-content 
+                                    [container]="toolbarElement"
+                                    [event]="event"
+                                    [tooltipDisabled]="true"
+                                    [isSelected]="selectedEvent?.id === event.id"
+                                    (pointerdown)="onNewEventSelect.emit(event.id)"
+                                />
+                            </div>
+                        </div>
+                    }
+                </div>
+            </p-panel>
+        }
+
+        <!-- Event Details Panel -->
+        @if(selectedEvent) {
+            <p-panel header="Esemény adatok" toggleable>
+                <ng-template #headericons>
+                   <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.4697 6.96973C14.7626 6.67684 15.2374 6.67684 15.5303 6.96973C15.8232 7.26262 15.8232 7.73738 15.5303 8.03028L10.5303 13.0303C10.2374 13.3232 9.76262 13.3232 9.46972 13.0303L4.46972 8.03028C4.17683 7.73738 4.17683 7.26262 4.46972 6.96973C4.76262 6.67684 5.23738 6.67684 5.53027 6.96973L10 11.4395L14.4697 6.96973Z" fill="currentColor"></path>
+                    </svg>
+                </ng-template>
+                <div class="event-fields">
+                    <div class="field">
+                        <label for="title">Név</label>
+                        <input 
+                            pInputText 
+                            id="title" 
+                            name="title" 
+                            autocomplete="off"
+                            [(ngModel)]="selectedEvent.title"
+                        />
+                    </div>
+                    <div class="row">
+                        <div class="field">
+                            <label id="start">Kezdés</label>
+                            <b>{{selectedEvent.start ? toStartText(selectedEvent.start) : "Ismeretlen"}}</b> 
+                        </div>
+                        <div class="field">
+                            <label id="end">Vége</label>
+                            <b>{{selectedEvent.start ? toEndText(selectedEvent.start) : "Ismeretlen"}}</b> 
+                        </div>
+                    </div>
+                    <div class="field">
+                        <label for="comment">Megjegyzés (opcionális)</label>
+                        <textarea 
+                            pInputTextarea 
+                            id="comment" 
+                            name="comment" 
+                            autocomplete="off"
+                            [(ngModel)]="selectedEvent.comment"
+                            spellcheck="false"
+                        ></textarea>
+                    </div>
+                </div>
+            </p-panel>
+            <p-button id="submitBtn" fluid (onClick)="submitBooking()">
+                @if(submitResult() === "loading") { <p-progress-spinner strokeWidth="8" /> }
+                @else { Foglalás }
+            </p-button>
+            @if(submitResult() === "error") { 
+                <div class="error-msg">Foglalás sikertelen! Sajnos valamilyen hiba lépett fel a szerver oldalán.</div> 
+            }
+        }
+    }
+    @else {
+        <!-- Success Message -->
+        <div class="success-msg">
+            <div class="header">
+                <app-checkmark />
+                <h2>Időpont sikeresen lefoglalva!</h2>
+            </div>
+            <div>Találkozzunk a megbeszélt időben.</div>
+        </div>
+    }
+</p-panel>

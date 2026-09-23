@@ -8,6 +8,15 @@ label {
     align-items: center;
     gap: 1rem;
     margin-bottom: 1rem;
+
+    .input-container {
+        display: flex;
+        flex-grow: 1;
+
+        input {
+            flex-grow: 1;
+        }
+    }
 }
 
 .buttons {

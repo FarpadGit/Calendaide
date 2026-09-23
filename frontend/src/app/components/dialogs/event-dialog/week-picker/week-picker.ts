@@ -22,6 +22,7 @@ export class WeekPicker {
   currentValues: number[] | null = [];
   inputText: string = '';
   onInputChanged: Function | null = null;
+  onInputTouched: Function | null = null;
 
   get weekdays() {
     return weekdays;
@@ -74,5 +75,7 @@ export class WeekPicker {
   registerOnChange(fn: Function): void {
     this.onInputChanged = fn;
   }
-  registerOnTouched(fn: Function): void {}
+  registerOnTouched(fn: Function): void {
+    this.onInputTouched = fn;
+  }
 }

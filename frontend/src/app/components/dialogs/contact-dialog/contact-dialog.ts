@@ -9,6 +9,7 @@ import { TextareaModule } from 'primeng/textarea';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SelectModule } from 'primeng/select';
+import { InplaceModule } from 'primeng/inplace';
 import { defaultEventColor } from '@/utils/shared';
 
 // if this is an Add New dialog and not an Edit one then 'id' will be an empty string
@@ -29,6 +30,7 @@ const defaultData = {
     ColorPickerModule,
     RadioButtonModule,
     SelectModule,
+    InplaceModule,
   ],
   templateUrl: './contact-dialog.html',
   styleUrl: './contact-dialog.scss',
@@ -61,15 +63,14 @@ export class ContactDialog {
     return defaultEventColor;
   }
 
+  get isBookingEnabled() {
+    return this.contactsService.isBookingEnabled();
+  }
+
   handleSave() {
     if (!this.contactData.name) return;
 
-    if (this.contactData.id === '')
-      this.contactsService.addContact({
-        name: this.contactData.name,
-        comment: this.contactData.comment,
-        color: this.contactData.color,
-      });
+    if (this.contactData.id === '') this.contactsService.addContact(this.contactData);
     else this.contactsService.editContact(this.contactData.id, this.contactData);
 
     this.onSave.emit(this.contactData.id);

@@ -1,0 +1,16 @@
+@if(isLoading()) {
+  <div id="loading-screen">
+    <p-progress-spinner [pt]="{ host: {style: {width: '33%', height: '33%'}}}" />
+  </div>
+}
+<div id="calendar" [ngClass]="{'loading': isLoading()}">
+  <app-fullcalendar #calendar (onNewEventSelect)="handleEventSelect($event)" />
+  <div id="calendar-toolbar">
+    <div class="background-container">
+      <img ngSrc="toolbar.jpg" fill priority />
+    </div>
+    <div class="toolbar-container">
+      <app-booking-toolbar (onNewEventSelect)="handleEventSelect($event)"/>
+    </div>
+  </div>
+</div>

@@ -37,8 +37,12 @@ describe('API', () => {
 
       const response = await service.makeRequest('/fake-endpoint', { method: 'POST' });
 
-      if (success) expect(response).toEqual({ data: mockAxiosResponse, error: null });
-      else expect(response).toEqual({ error: expect.any(String), data: null });
+      if (success)
+        expect(response).toEqual(expect.objectContaining({ data: mockAxiosResponse, error: null }));
+      else
+        expect(response).toEqual(
+          expect.objectContaining({ error: expect.any(String), data: null }),
+        );
     },
   );
 

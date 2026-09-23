@@ -1,30 +1,131 @@
-<form #formData="ngForm">
-    <div class="field">
-        <div class="hint-label">
-            <label for="savemode">Mentési Mód</label>
-            <span class="hint-icon" [pTooltip]="savemodeTooltip" tooltipPosition="right" [dt]="{maxWidth: 'min(45rem, 190vw)'}">?</span>
+<form [formGroup]="settingsForm" (ngSubmit)="handleSettingsChange()"> 
+    <div class="field-group" formGroupName="userSettings">
+        <div class="field">
+            <app-label-with-hint for="savemode" labelText="Mentési Mód" [isDemoUser]="isDemoUser">
+                <ng-container *ngTemplateOutlet="savemodeTooltip" />
+            </app-label-with-hint>
+            <p-selectbutton 
+                id="savemode" 
+                name="savemode"
+                fluid
+                [options]="saveModes" 
+                formControlName="saveMode"
+                optionLabel="label" 
+                optionValue="value" 
+                [allowEmpty]="false" 
+            />
         </div>
-        <p-selectbutton 
-            id="savemode" 
-            name="savemode"
-            fluid
-            [options]="saveModes" 
-            [(ngModel)]="userSettings.saveMode" 
-            optionLabel="label" 
-            optionValue="value" 
-            [allowEmpty]="false" 
-            [disabled]="isDemoUser"
-        />
+        <div class="field">
+            <app-label-with-hint for="business-hours-add" labelText="Nyitvatartási idők" [isDemoUser]="isDemoUser">
+                <ng-container *ngTemplateOutlet="businessHoursTooltip" />
+            </app-label-with-hint>
+            <div class="field-group-inner" formArrayName="businessHours">
+                @for(businessHourGroup of businessHours; track businessHourGroup; let i = $index) {
+                    <div class="business-hours" [formGroupName]="i">
+                        <div class="field">
+                            <label [for]="'business-days_' + i">Napok</label>
+                            <app-week-picker 
+                                [id]="'business-days_' + i"
+                                [formControl]="businessHourGroup.controls.daysOfWeek"
+                            />
+                        </div>
+                        <div class="field">
+                            <label [for]="'business-hours-start_' + i">Kezdés</label>
+                            <p-datepicker 
+                                [inputId]="'business-hours-start_' + i" 
+                                [formControl]="businessHourGroup.controls.startTime" 
+                                [timeOnly]="true" 
+                            />
+                        </div>
+                        <div class="field">
+                            <label [for]="'business-hours-end_' + i">Zárás</label>
+                            <p-datepicker 
+                                [inputId]="'business-hours-end_' + i" 
+                                [formControl]="businessHourGroup.controls.endTime" 
+                                [timeOnly]="true" 
+                            />
+                        </div>
+                        <p-button 
+                            type="button" 
+                            label="Törlés" 
+                            fluid
+                            severity="warn" 
+                            (click)="removeBusinessHour(i)" 
+                        />
+                        @if(businessHourGroup.invalid && businessHourGroup.touched)
+                        {
+                            <div class="error-label">Ezek a mezők nem lehetnek üresek, ha nem akarsz beállítani értéket akkor távolítsd el a Törlés gombbal.</div>
+                        }
+                    </div>
+                }
+                <p-button 
+                    [pt]="{root: {id: 'business-hours-add'}}"
+                    label="Új hozzáadása"
+                    type="button" 
+                    fluid
+                    [disabled]="isDemoUser"
+                    (click)="addNewBusinessHours()"/>
+            </div>
+        </div>
+        <div class="field-group-inner" formGroupName="bookingData">
+            <div class="field row">
+                <app-label-with-hint for="bookingEnabled" labelText="Időpontfoglalás elérhetősége külső felhasználóknak" [isDemoUser]="isDemoUser" [endAlign]="false">
+                    <ng-container *ngTemplateOutlet="bookingTooltip" />
+                </app-label-with-hint>
+                <p-toggleswitch
+                    inputId="bookingEnabled"
+                    name="bookingEnabled" 
+                    formControlName="bookingEnabled"
+                />
+            </div>
+            @if(bookingData.bookingEnabled.value){
+                <div class="field">
+                    <label for="bookingId">Időpontfoglalási azonosító</label>
+                    <input 
+                        pInputText 
+                        id="bookingId" 
+                        name="bookingId" 
+                        autocomplete="off" 
+                        formControlName="bookingId"
+                    />
+                    @if((bookingData.bookingId.errors?.['minlength'] || bookingData.bookingId.errors?.['pattern']) && bookingData.bookingId.touched) 
+                    {
+                        <div class="error-label">Adj meg egy legalább 5 karakter hosszú azonosítót amiben csak ékezet nélküli kisbetűk, számok és kötőjel lehet.</div>
+                    }
+                    @if(bookingData.bookingId.errors?.['conflict'])
+                    {
+                        <div class="error-label">Ez az azonosító ütközik egy másik felhasználó időpontfoglalási azonosítójával.</div>
+                    }
+                </div>
+                <div class="field">
+                    <label for="bookingDuration">Foglalható esemény hossza (perc)</label>
+                    <input 
+                        pInputText
+                        type="number"
+                        id="bookingDuration" 
+                        name="bookingDuration" 
+                        autocomplete="off" 
+                        formControlName="bookingDuration"
+                    />
+                    @if((bookingData.bookingDuration.errors?.['required'] || bookingData.bookingDuration.errors?.['min']) && 
+                        bookingData.bookingDuration.touched) 
+                    {
+                        <div class="error-label">Állíts be egy min. 30 perces időhosszt amit felhasználók foglalni tudnak a naptáradban.</div>
+                    }
+                </div>
+            }
+        </div>
     </div>
     <div class="field">
-        <label for="displayname">Felhasználó Név</label>
+        <app-label-with-hint for="displayname" labelText="Megjelenítési Név" [isDemoUser]="isDemoUser">
+            <ng-container *ngTemplateOutlet="displaynameTooltip" />
+        </app-label-with-hint>
         <input 
             pInputText 
             id="displayname" 
             name="displayname" 
             autocomplete="off" 
-            [(ngModel)]="displayname" 
-            [disabled]="isDemoUser"
+            formControlName="displayName"
         />
     </div>
     @if(!isDemoUser){
@@ -40,50 +141,67 @@
                     <label for="password">Új jelszó</label>
                     <div class="input-container">
                         <input 
+                            #passwrdInput
                             pInputText 
                             id="password" 
                             name="password"
                             autocomplete="off" 
-                            [(ngModel)]="password" 
+                            formControlName="password"
                         />
                         <p-button 
                             type="button" 
                             text 
                             severity="danger"
-                            (click)="closeCallback($event)" 
+                            (click)="settingsForm.controls.password.setValue('');closeCallback($event)" 
                             [pt]="{root: {style: {height: '100%'}}}"
                         >
                             <i class="pi pi-times" pButtonIcon></i>
                         </p-button>
                     </div>
+                    @if(settingsForm.controls.password.errors?.['minlength'] && 
+                        settingsForm.controls.password.touched) 
+                    {
+                        <div class="error-label">Adj meg egy legalább 6 karakter hosszú jelszót.</div>
+                    }
                 </div>
             </ng-template>
         </p-inplace>
-        <p-button id="delete-account-btn" label="Fiók Törlése" severity="danger" fluid (onClick)="handleDelete($event)" />
+        <p-button id="delete-account-btn" label="Fiók Törlése" severity="danger" fluid type="button" (onClick)="handleAccountDelete($event)" />
     }
-    <p-button id="submit-btn" label="Beállítások Mentése" fluid (onClick)="handleSettingsChange()" [disabled]="isDemoUser" />
+    <p-button id="submit-btn" label="Beállítások Mentése" fluid type="submit" [disabled]="isDemoUser" />
 </form>
 
 <p-confirmpopup />
 
+<!-- tooltip templates -->
 <ng-template #savemodeTooltip>
-    <div class="tooltip">
-        <div>
-            <b>Auto: </b>
-            <span>
-                Minden változtatás után azonnal elmenti az új állapotot az adatbázisba, beleértve események átmozgatását vagy átméretezését is.
-                Hasznos ha viszonylag kevés műveletet kell feldolgozni egyszerre, de ha sűrűn változtatsz sok mindent akkor a teljesítmény szenvedhet.
-            </span>
-        </div>
-        <div>
-            <b>Manuális: </b>
-            <span>
-                Minden változtatást csak akkor ment el az adatbázisba, a ha megnyomod a 'Mentés' gombot az eszköztáron.
-                Akkor ajánlott, ha sok változtatást akarsz egy nagy kérésben elküldeni a szervernek és nem több tucat kisebb (és lassú) üzenetként.
-            </span>
-        </div>
-        @if(isDemoUser) {
-            <div>(** Demó felhasználóként semmilyen változást nem tudsz elmenteni **)</div>
-        }
+    <div>
+        <b>Auto: </b>
+        <span>
+            Minden változtatás után azonnal elmenti az új állapotot az adatbázisba, beleértve események átmozgatását vagy átméretezését is.
+            Hasznos ha viszonylag kevés műveletet kell feldolgozni egyszerre, de ha sűrűn változtatsz sok mindent akkor a teljesítmény szenvedhet.
+        </span>
     </div>
+    <div>
+        <b>Manuális: </b>
+        <span>
+            Minden változtatást csak akkor ment el az adatbázisba, a ha megnyomod a 'Mentés' gombot az eszköztáron.
+            Akkor ajánlott, ha sok változtatást akarsz egy nagy kérésben elküldeni a szervernek és nem több tucat kisebb (és lassú) üzenetként.
+        </span>
+    </div>
+</ng-template>
+<ng-template #businessHoursTooltip>
+    <div>Kiemeli a naptárban a nyitvatartási időszakodat, külső időpontfoglalók csak az itt beállított időkereten belül tudnak foglalni a naptáradba.</div>
+    <div>Többet is megadhatsz különböző napokra, ha például rövidített nyitvatartásod van a hétvégéken.</div>
+</ng-template>
+<ng-template #bookingTooltip>
+    <div>Ha bekapcsolod akkor mindenki számára elérhetővé válik egy URL amin keresztül bejelentkezés nélkül időpontot tud foglalni a naptáradba.</div>
+    <div>Ez az URL a <b>{{origin}}/[azonosító]/foglalas</b>, ahol az azonosítót te állíthatod be a beállítások közt.</div>
+    <div>
+        Ha azt szeretnéd, hogy egy megbízható ismerősöd a számára létrehozott ütemezetlen eseményeket használja időpontfoglaláshoz, akkor beállíthatsz a kapcsolataidnak 
+        egy jelszót amivel igazolni tudja magát és akkor közvetlenül az ahhoz tartozó esemény blokkokat tudja elhelyezni a naptáradba.
+    </div>
+</ng-template>
+<ng-template #displaynameTooltip>
+    <div>Ez a név fog megjelenni az eszköztárban, valamint ha bekapcsoltad akkor a külső időpontfoglalási nézetben is.</div>
 </ng-template>

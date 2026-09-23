@@ -34,6 +34,7 @@ describe('CalendarEventContent', () => {
 
   it('should display the event title with asterisk if event has comment and calendar view is not weekly or daily', async () => {
     component.event = mockEventWithComment;
+    component.view = undefined;
     await fixture.whenStable();
     const titleEl = fixture.nativeElement.querySelector('.event-text') as HTMLElement;
 
@@ -83,13 +84,13 @@ describe('CalendarEventContent', () => {
     [true, false],
     [true, true],
   ])(
-    'should not display the tooltip if being dragged or parent element is not calendar (dragged: %s, is from calendar: %s)',
-    async (isDragged, hasView) => {
-      component.view = hasView ? 'timeGridWeek' : undefined;
+    'should not display the tooltip if being dragged or tooltipDisabled property is set (dragged: %s, tooltipDisabled: %s)',
+    async (isDragged, tooltipDisabled) => {
+      component.tooltipDisabled = tooltipDisabled;
       component.isDragged = isDragged;
       await fixture.whenStable();
 
-      expect(component.canShowToolTip).toBe(!isDragged && hasView);
+      expect(component.canShowToolTip).toBe(!isDragged && !tooltipDisabled);
     },
   );
 });

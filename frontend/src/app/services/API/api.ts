@@ -38,16 +38,23 @@ export class API {
       case 404:
         errorMessage = 'Szerver hiba: A keresett érték nem található az adatbázisban.';
         break;
+      case 409:
+        errorMessage = 'Szerver hiba: A kérés ütközésben áll egy másik felhasználóval.';
+        break;
       default:
         errorMessage = 'Szerver hiba: Ismeretlen probléma lépett fel.';
         break;
     }
-    return { error: errorMessage, data: null };
+    return { status: error.response?.status, error: errorMessage, data: null };
   };
 
   async makeRequest(url: string, options?: AxiosRequestConfig<any>) {
     const response = this.callAxios(url, options)
-      .then((res: AxiosResponse) => ({ data: !!res.data ? res.data : true, error: null }))
+      .then((res: AxiosResponse) => ({
+        status: 200,
+        data: !!res.data ? res.data : true,
+        error: null,
+      }))
       .catch(this.errorFn);
     return response;
   }

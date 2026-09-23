@@ -1,4 +1,13 @@
-import { Component, effect, EventEmitter, inject, Output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  effect,
+  EventEmitter,
+  inject,
+  Output,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { User } from '@/services/user';
 import { UserEvents } from '@/services/user-events';
 import { CalendarEventContent } from '@/components/calendar/calendar-event-content/calendar-event-content';
@@ -11,7 +20,6 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
 import { addToDateMinutes, getDuration } from '@/utils/datetime';
-import { defaultEventColor } from '@/utils/shared';
 
 @Component({
   selector: 'app-fullcalendar',
@@ -19,14 +27,14 @@ import { defaultEventColor } from '@/utils/shared';
   templateUrl: './fullcalendar.html',
   styleUrl: './fullcalendar.scss',
 })
-export class Fullcalendar {
+export class Fullcalendar implements AfterViewInit {
   @ViewChild('calendar') private calendar: FullCalendarComponent | undefined;
   @Output() onDateSelect: EventEmitter<Date> = new EventEmitter();
   private userService = inject(User);
   private eventsService = inject(UserEvents);
 
   private selectedDate?: string;
-  defaultEventColor = defaultEventColor;
+  private loaded = signal(false);
 
   calendarOptions: CalendarOptions = {
     initialView: 'dayGridMonth',
@@ -113,6 +121,8 @@ export class Fullcalendar {
     effect(() => {
       const user = this.userService.currentUserData.user();
       if (user) this.updateCalendar();
+      if (user && this.loaded())
+        this.calendar?.getApi().setOption('businessHours', user?.settings.businessHours);
     });
 
     effect(() => {
@@ -123,6 +133,10 @@ export class Fullcalendar {
       calendar?.getEventById(prev ?? '')?.setExtendedProp('context-menu-open', false);
       calendar?.getEventById(current ?? '')?.setExtendedProp('context-menu-open', true);
     });
+  }
+
+  ngAfterViewInit(): void {
+    this.loaded.set(true);
   }
 
   handleDateClick(date: Date, forceView: boolean = false) {

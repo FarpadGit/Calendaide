@@ -57,6 +57,7 @@ class Contact(BaseModel):
   name: str
   comment: Optional[str] = None
   color: Optional[str] = None
+  bookingPassword: Optional[str] = None
 
 class User(BaseModel):
   # MongoDB field _id: ObjectId <--> Pydantic field id: str
@@ -73,7 +74,19 @@ class User(BaseModel):
   displayname: str
 
   class UserSettings(BaseModel):
+    class BusinessHours(BaseModel):
+      daysOfWeek: list[int]
+      startTime: str
+      endTime: str
+
+    class BookingData(BaseModel):
+      bookingEnabled: Optional[bool] = None
+      bookingId: Optional[str] = None
+      bookingDuration: Optional[int] = None
+
     saveMode: Optional[str] = None
+    businessHours: Optional[list[BusinessHours]] = None
+    bookingData: Optional[BookingData] = None
   
   settings: Optional[UserSettings] = None
   contacts: list[Contact] = []

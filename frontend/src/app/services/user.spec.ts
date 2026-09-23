@@ -4,11 +4,18 @@ import { User } from './user';
 import { UserApi } from '@/services/API/user.api';
 import { mockUser } from '@/../test/mocks';
 import { userApiSpy } from '@/../test/mockServices';
-import { userSettings } from '@/types.usersettings';
 
 describe('User', () => {
   let service: User;
-
+  const defaultUserSettings: NonNullable<DeepRequired<userType['settings']>> = {
+    saveMode: 'auto',
+    businessHours: [],
+    bookingData: {
+      bookingEnabled: false,
+      bookingId: '',
+      bookingDuration: 60,
+    },
+  };
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [{ provide: UserApi, useValue: userApiSpy }],
@@ -30,14 +37,17 @@ describe('User', () => {
   it('should return the default user settings if no user object exists', () => {
     service.currentUserData.user.set(null);
 
-    expect(service.getUserSettings()).toEqual({ saveMode: 'auto' });
+    expect(service.getUserSettings()).toEqual(defaultUserSettings);
   });
 
   it('should save new user settings locally and send request to server', async () => {
     const mockNewUserSettings = {
       displayname: 'Fake Name',
       password: 'fakepassword123',
-      settings: { saveMode: 'manual' } as userSettings,
+      settings: {
+        ...defaultUserSettings,
+        saveMode: 'manual',
+      } as userType['settings'],
     };
     service.saveUserSettings(mockNewUserSettings);
     const user = service.currentUserData.user();

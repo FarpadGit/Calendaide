@@ -36,6 +36,11 @@ class ContactDTO(BaseModel):
     name: Optional[str] = Undefined
     comment: Optional[str] = Undefined
     color: Optional[str] = Undefined
+    bookingPassword: Optional[str] = Undefined
+
+class ContactCredentialsDTO(BaseModel):
+    name: str
+    password: str
 
 class EventDTO(BaseModel):
     id: str

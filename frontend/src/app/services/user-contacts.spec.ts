@@ -110,6 +110,17 @@ describe('UserContacts', () => {
     else expect(contactApiSpy.updateContact).not.toHaveBeenCalled();
   });
 
+  it.each([false, true])(
+    'should return whether external booking is enabled in user settings %s',
+    (isBookingEnabled) => {
+      const _mockUser = structuredClone(mockUser) as DeepRequired<userType>;
+      _mockUser.settings.bookingData.bookingEnabled = isBookingEnabled;
+      userSpy.currentUserData.user.set(_mockUser);
+
+      expect(service.isBookingEnabled()).toBe(isBookingEnabled);
+    },
+  );
+
   afterAll(() => {
     userSpy.currentUserData.user.set(null);
     userSpy.currentUserData.contacts.set([]);

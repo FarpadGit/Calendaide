@@ -5,7 +5,18 @@ export function parseUserData(userData: {
   token?: string;
 }) {
   const result = { ...userData };
-  result.events = result.events.map((e: any) => ({
+
+  for (let key in userData.user.settings) {
+    if (userData.user.settings[key] == null) delete result.user.settings[key];
+  }
+
+  result.events = parseEventData(result.events);
+
+  return result;
+}
+
+export function parseEventData(eventData: any[]) {
+  const result = eventData.map((e: any) => ({
     ...e,
     start: e.start !== null ? new Date(e.start) : undefined,
     end: e.end !== null ? new Date(e.end) : undefined,

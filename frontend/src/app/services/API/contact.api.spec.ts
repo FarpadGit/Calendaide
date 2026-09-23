@@ -3,12 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import { ContactApi } from './contact.api';
 import { apiSpy } from '@/../test/mockServices';
 import { API } from '@/services/API/api';
-import { mockContacts } from '@/../test/mocks';
+import { mockContacts, mockResponse } from '@/../test/mocks';
 
 describe('ContactApi', () => {
   let service: ContactApi;
-  const mockSuccessResponse = { data: true, error: null };
-  const mockErrorResponse = { data: null, error: 'mockErrorMessage' };
+  const mockSuccessResponse = mockResponse(true);
+  const mockErrorResponse = mockResponse(null, 'mockErrorMessage');
 
   beforeEach(() => {
     TestBed.configureTestingModule({
