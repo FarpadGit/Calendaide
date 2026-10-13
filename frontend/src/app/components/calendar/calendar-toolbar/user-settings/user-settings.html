@@ -166,7 +166,15 @@
                 </div>
             </ng-template>
         </p-inplace>
-        <p-button id="delete-account-btn" label="Fiók Törlése" severity="danger" fluid type="button" (onClick)="handleAccountDelete($event)" />
+        <p-button 
+            id="delete-account-btn" 
+            [label]="!isDeleting ? 'Fiók Törlése' : 'Kijelentkezés...'"
+            severity="danger" 
+            fluid 
+            type="button" 
+            (onClick)="handleAccountDelete($event)" 
+            [disabled]="isDeleting"
+        />
     }
     <p-button id="submit-btn" label="Beállítások Mentése" fluid type="submit" [disabled]="isDemoUser" />
 </form>

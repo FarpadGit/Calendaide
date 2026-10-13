@@ -65,6 +65,8 @@ export class UserSettings {
     }),
   });
 
+  isDeleting: boolean = false;
+
   get userSettings() {
     return this.settingsForm.controls.userSettings.controls;
   }
@@ -180,6 +182,7 @@ export class UserSettings {
   }
 
   handleAccountDelete(e: Event) {
+    if (this.isDeleting) return;
     this.confirmationService.confirm({
       target: e.currentTarget as EventTarget,
       message: `Biztos véglegesen törölni szeretnéd a fiókodat és vele együtt az összes 
@@ -195,6 +198,7 @@ export class UserSettings {
         severity: 'danger',
       },
       accept: async () => {
+        this.isDeleting = true;
         await this.userService.deleteUser();
         await this.authService.logoutUser();
       },
